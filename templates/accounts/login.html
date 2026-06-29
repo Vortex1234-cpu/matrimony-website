@@ -78,6 +78,7 @@
                         <i class="bi bi-box-arrow-in-right me-2"></i>
                         Login
                     </button>
+                    <input type="hidden" name="fcm_token" id="fcm_token">
 
                 </form>
 
@@ -104,10 +105,13 @@
 
 {% block scripts %}
 <script>
+    // Show / Hide password
     document.getElementById('togglePassword')
         .addEventListener('click', function () {
+
             const pwd = document.getElementById('passwordInput');
             const icon = document.getElementById('eyeIcon');
+
             if (pwd.type === 'password') {
                 pwd.type = 'text';
                 icon.className = 'bi bi-eye-slash fs-5';
@@ -116,5 +120,19 @@
                 icon.className = 'bi bi-eye fs-5';
             }
         });
+
+    // Attach FCM token to login form
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const token = localStorage.getItem("fcm_token");
+
+        if (token) {
+            document.getElementById("fcm_token").value = token;
+            console.log("FCM token attached:", token);
+        } else {
+            console.log("No FCM token found.");
+        }
+
+    });
 </script>
 {% endblock %}

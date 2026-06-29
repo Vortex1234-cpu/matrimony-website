@@ -3,6 +3,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from notifications.models import DeviceToken
 from .forms import RegisterForm, LoginForm
 from .models import User, AccountDeletionRequest
 from .email_utils import (
@@ -91,6 +92,17 @@ def verify_otp_view(request):
                 # Login OTP verified
                 user.save()
                 login(request, user)
+
+                # Save FCM token with logged-in user
+                token = request.POST.get("fcm_token")
+                if token:
+                    DeviceToken.objects.update_or_create(
+                        token=token,
+                        defaults={
+                            "user": user
+                        }
+                    )
+
                 del request.session['otp_user_id']
                 del request.session['otp_purpose']
                 messages.success(
@@ -189,12 +201,27 @@ def login_view(request):
 
             if user is not None:
                 if not user.is_active:
-                    messages.error(request, '❌ Your account is disabled.')
+                    messages.error(request, "❌ Your account is disabled.")
                 else:
                     login(request, user)
-                    messages.success(request, f'Welcome back, {user.first_name}! 👋')
-                    next_url = request.GET.get('next', '')
-                    return redirect(next_url if next_url else 'dashboard')
+
+                    # Save FCM token with logged-in user
+                    token = request.POST.get("fcm_token")
+                    if token:
+                        DeviceToken.objects.update_or_create(
+                            token=token,
+                            defaults={
+                                "user": user
+                            }
+                        )
+
+                    messages.success(
+                        request,
+                        f"Welcome back, {user.first_name}! 👋"
+                    )
+
+                    next_url = request.GET.get("next", "")
+                    return redirect(next_url if next_url else "dashboard")
             else:
                 messages.error(
                     request,
