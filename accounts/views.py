@@ -98,9 +98,7 @@ def verify_otp_view(request):
                 if token:
                     DeviceToken.objects.update_or_create(
                         token=token,
-                        defaults={
-                            "user": user
-                        }
+                        defaults={"user": user}
                     )
 
                 del request.session['otp_user_id']
@@ -205,20 +203,19 @@ def login_view(request):
                 else:
                     login(request, user)
 
+                    # Save FCM token linked to the now-logged-in user
+                    token = request.POST.get("fcm_token", "").strip()
                     print("=" * 60)
                     print("POST DATA:", request.POST)
-                    print("FCM TOKEN:", request.POST.get("fcm_token"))
+                    print("FCM TOKEN:", token)
                     print("=" * 60)
 
-                    token = request.POST.get("fcm_token")
                     if token:
                         DeviceToken.objects.update_or_create(
                             token=token,
-                            defaults={
-                                "user": user
-                            }
+                            defaults={"user": user}
                         )
-                        print("TOKEN UPDATED")
+                        print("TOKEN UPDATED for user:", user)
                     else:
                         print("NO TOKEN RECEIVED")
 
@@ -256,6 +253,9 @@ def delete_account_view(request):
     ).first()
 
     if request.method == 'POST':
+        print("=" * 60)
+        print("POST DATA:", request.POST)
+        print("=" * 60)
         password = request.POST.get('password', '')
         confirm = request.POST.get('confirm')
         reason = request.POST.get('reason', '').strip()
