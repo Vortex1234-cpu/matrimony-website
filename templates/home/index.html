@@ -1,0 +1,279 @@
+{% extends 'base.html' %}
+{% block title %}Rajapalayam Matrimony - Find Your Perfect Match{% endblock %}
+
+{% block content %}
+
+<!-- ===================== HERO SECTION ===================== -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center gy-5">
+            <div class="col-lg-7">
+
+                <div class="hero-badge animate__animated
+                             animate__fadeInDown">
+                    <i class="bi bi-patch-check-fill"></i>
+                    Trusted by 1000+ Families in Rajapalayam
+                </div>
+
+                <h1 class="hero-title animate__animated
+                            animate__fadeInLeft">
+                    Find Your
+                    <span>Perfect Life</span>
+                    Partner
+                </h1>
+
+                <p class="hero-subtitle mb-5 animate__animated
+                           animate__fadeInLeft
+                           animate__delay-1s">
+                    Join Rajapalayam Matrimony — the most trusted
+                    community matrimony platform. Safe, verified
+                    profiles from your own hometown. Start your
+                    beautiful journey today.
+                </p>
+                <div class="d-flex flex-wrap gap-3
+                            animate__animated animate__fadeInUp
+                            animate__delay-1s">
+                    <a href="{% url 'register' %}" class="btn-matrimony-primary pulse-btn">
+                        <i class="bi bi-person-plus me-2"></i>
+                        Register Free
+                    </a>
+                    <a href="{% url 'search' %}" class="btn-matrimony-outline">
+                        <i class="bi bi-search me-2"></i>
+                        Browse Profiles
+                    </a>
+                </div>
+            </div>
+
+            <!-- Hero Right -->
+            <div class="col-lg-5 d-none d-lg-flex align-items-center justify-content-center">
+                <div class="float-animation"
+                    style="display:flex; align-items:center; justify-content:center; position:relative;">
+                    <!-- Gold ring border -->
+                    <div
+                        style="width:380px; height:380px; position:relative; display:flex; align-items:center; justify-content:center;">
+                        <div style="position:absolute; width:380px; height:380px;
+                        clip-path: path('M 190 340 C 190 340 20 230 20 120 C 20 55 85 20 140 45 C 162 55 178 70 190 82 C 202 70 218 55 240 45 C 295 20 360 55 360 120 C 360 230 190 340 190 340 Z');
+                        background: linear-gradient(135deg, rgba(212,175,55,0.4), rgba(212,175,55,0.1));
+                        border: 3px solid rgba(212,175,55,0.6);">
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=600&q=80"
+                            alt="Happy Couple" style="width: 360px; height: 360px; object-fit: cover;
+                        object-position: center 20%;
+                        clip-path: path('M 180 320 C 180 320 18 218 18 113 C 18 52 80 18 133 43 C 155 53 170 68 180 80 C 190 68 205 53 227 43 C 280 18 342 52 342 113 C 342 218 180 320 180 320 Z');
+                        filter: drop-shadow(0 25px 50px rgba(0,0,0,0.7));
+                        display: block;">
+                    </div>
+                    <!-- Decorative hearts -->
+                    <div
+                        style="position:absolute; top:-10px; right:20px; font-size:1.8rem; animation: heartbeat 1.6s ease-in-out infinite;">
+                        💛</div>
+                    <div
+                        style="position:absolute; bottom:10px; left:20px; font-size:1.2rem; animation: heartbeat 2s ease-in-out infinite;">
+                        🤍</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== STATS SECTION ===================== -->
+<section class="stats-section">
+    <div class="container">
+        <div class="row g-0">
+            <div class="col-6 col-md-3 reveal">
+                <div class="stat-item">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">
+                        <i class="bi bi-people me-1"></i>
+                        Active Profiles
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 reveal">
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">
+                        <i class="bi bi-hearts me-1"></i>
+                        Successful Marriages
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 reveal">
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">
+                        <i class="bi bi-geo-alt me-1"></i>
+                        Towns Covered
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 reveal">
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">
+                        <i class="bi bi-shield-check me-1"></i>
+                        Verified Profiles
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== HOW IT WORKS ===================== -->
+<section style="padding:90px 0;background:#fff;">
+    <div class="container">
+        <div class="text-center mb-5 reveal">
+            <span style="background:var(--soft-pink);
+                         color:var(--primary);
+                         padding:6px 18px;
+                         border-radius:50px;
+                         font-size:0.85rem;
+                         font-weight:600;">
+                Simple Process
+            </span>
+            <h2 class="fw-bold mt-3 mb-2" style="color:var(--primary)">
+                How Rajapalayam Matrimony Works
+            </h2>
+            <p class="text-muted">
+                Find your perfect match in just 3 simple steps
+            </p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4 reveal">
+                <div class="text-center p-4">
+                    <div style="width:80px;height:80px;
+                                background:linear-gradient(
+                                135deg,var(--primary),
+                                var(--primary-light));
+                                border-radius:50%;
+                                display:flex;
+                                align-items:center;
+                                justify-content:center;
+                                margin:0 auto 20px;
+                                font-size:2rem;
+                                box-shadow:0 8px 24px
+                                rgba(139,0,0,0.3);">
+                        1️⃣
+                    </div>
+                    <h5 class="fw-bold mb-2">
+                        Create Free Profile
+                    </h5>
+                    <p class="text-muted small">
+                        Register and fill your complete
+                        profile with horoscope details,
+                        education, career and family info.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4 reveal">
+                <div class="text-center p-4">
+                    <div style="width:80px;height:80px;
+                                background:linear-gradient(
+                                135deg,var(--gold),
+                                var(--gold-light));
+                                border-radius:50%;
+                                display:flex;
+                                align-items:center;
+                                justify-content:center;
+                                margin:0 auto 20px;
+                                font-size:2rem;
+                                box-shadow:0 8px 24px
+                                rgba(212,175,55,0.3);">
+                        2️⃣
+                    </div>
+                    <h5 class="fw-bold mb-2">
+                        Search & Connect
+                    </h5>
+                    <p class="text-muted small">
+                        Browse verified profiles using
+                        advanced filters. Send interest
+                        to profiles you like.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4 reveal">
+                <div class="text-center p-4">
+                    <div style="width:80px;height:80px;
+                                background:linear-gradient(
+                                135deg,#27ae60,#2ecc71);
+                                border-radius:50%;
+                                display:flex;
+                                align-items:center;
+                                justify-content:center;
+                                margin:0 auto 20px;
+                                font-size:2rem;
+                                box-shadow:0 8px 24px
+                                rgba(39,174,96,0.3);">
+                        3️⃣
+                    </div>
+                    <h5 class="fw-bold mb-2">
+                        Get Married 💍
+                    </h5>
+                    <p class="text-muted small">
+                        When both parties accept,
+                        exchange contact details and
+                        begin your beautiful journey.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== CTA SECTION ===================== -->
+<section style="background:linear-gradient(
+                135deg,var(--primary-dark),
+                var(--primary-light));
+                padding:90px 0;">
+    <div class="container text-center">
+        <div class="reveal">
+            <div class="heartbeat d-inline-block
+                         fs-1 mb-3">
+                💍
+            </div>
+            <h2 class="fw-bold text-white mb-3 fs-1">
+                Your Perfect Match is Waiting
+            </h2>
+            <p class="text-white opacity-75 mb-5 fs-5">
+                Join thousands of happy families.
+                Register today — it's completely free!
+            </p>
+            <div class="d-flex gap-3 justify-content-center
+                        flex-wrap">
+                <a href="{% url 'register' %}" class="btn-matrimony-gold fs-5 px-5 py-3">
+                    <i class="bi bi-heart-fill me-2"></i>
+                    Start Your Journey
+                </a>
+                <a href="{% url 'search' %}" class="btn-matrimony-outline fs-5
+                          px-5 py-3">
+                    <i class="bi bi-search me-2"></i>
+                    Browse Profiles
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Scroll reveal animation
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        },
+        { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('.reveal').forEach(el => {
+        observer.observe(el);
+    });
+</script>
+{% endblock %}

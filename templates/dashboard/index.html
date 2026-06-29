@@ -1,0 +1,318 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - Rajapalayam Matrimony{% endblock %}
+
+{% block content %}
+
+<!-- Dashboard Hero Background -->
+<div class="dashboard-bg">
+    <div class="container">
+        <div class="text-white">
+            <h2 class="fw-bold mb-1">
+                Welcome, {{ user.first_name }}! 👋
+            </h2>
+            <p class="opacity-75 mb-0">
+                Here is your matrimony overview
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+
+    <!-- Photo Upload Reminder -->
+    {% if user.is_profile_complete %}
+    {% with profile=user.profile %}
+    {% if profile.profile_photo %}
+    {% if 'cloudinary' not in profile.profile_photo.url %}
+    <div class="alert mt-4 mb-0" style="background:#fff3cd;
+                border:none;
+                border-radius:14px;
+                border-left:4px solid #f39c12;">
+        <div class="d-flex align-items-center gap-3">
+            <span style="font-size:1.5rem;">📸</span>
+            <div class="flex-fill">
+                <strong>Update your profile photo</strong>
+                <br>
+                <span class="small text-muted">
+                    Re-upload your photo to show on the live website.
+                </span>
+            </div>
+            <a href="{% url 'update_photo' %}" class="btn-matrimony-primary text-decoration-none px-4 py-2"
+                style="border-radius:50px; font-size:0.85rem; white-space:nowrap;">
+                Upload Now
+            </a>
+        </div>
+    </div>
+    {% endif %}
+    {% endif %}
+    {% endwith %}
+    {% endif %}
+
+    <!-- Daily Match Suggestion Card -->
+    {% if daily_match_notification %}
+    <div class="form-section mt-4 mb-0" style="border-left:4px solid var(--primary);
+                background:linear-gradient(135deg,#fff5f5 0%,#fff 100%);">
+        <div class="d-flex justify-content-between align-items-start gap-3">
+            <div class="flex-fill">
+                <h6 class="fw-bold mb-1" style="color:var(--primary);">
+                    {{ daily_match_notification.title }}
+                </h6>
+                <p class="text-muted mb-3" style="font-size:0.88rem; line-height:1.6;">
+                    {{ daily_match_notification.message }}
+                </p>
+                <a href="{{ daily_match_notification.link }}"
+                    class="btn-matrimony-primary text-decoration-none px-3 py-1"
+                    style="font-size:0.82rem; border-radius:20px;">
+                    Browse Matches →
+                </a>
+            </div>
+            <span style="font-size:2.5rem; flex-shrink:0;">💑</span>
+        </div>
+        <p class="text-muted mb-0 mt-3" style="font-size:0.75rem;">
+            <i class="bi bi-clock me-1"></i>
+            {{ daily_match_notification.created_at|timesince }} ago
+        </p>
+    </div>
+    {% endif %}
+
+    <!-- Stats -->
+    <div class="row g-4 mb-4 mt-2">
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="number">{{ profile_views }}</div>
+                <div class="text-muted small mt-1">
+                    <i class="bi bi-eye"></i> Profile Views
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card position-relative">
+                <div class="number">{{ interests_received }}</div>
+                <div class="text-muted small mt-1">
+                    <i class="bi bi-envelope-heart"></i> Interests Received
+                </div>
+                {% if pending_interests > 0 %}
+                <span class="position-absolute top-0 end-0 m-2 badge rounded-pill" style="background:var(--primary)">
+                    {{ pending_interests }}
+                </span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="number">{{ interests_sent }}</div>
+                <div class="text-muted small mt-1">
+                    <i class="bi bi-send"></i> Interests Sent
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="number">{{ mutual_count }}</div>
+                <div class="text-muted small mt-1">
+                    <i class="bi bi-people"></i> Mutual Matches
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weekly Invite Usage -->
+    <div class="form-section mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-bold mb-0" style="color:var(--primary)">
+                <i class="bi bi-envelope-heart me-2"></i>Weekly Invite Usage
+            </h6>
+            <a href="{% url 'plans_page' %}" class="text-decoration-none small" style="color:var(--primary)">
+                Upgrade Plan →
+            </a>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="small text-muted">
+                {% if weekly_limit >= 999 %}
+                ♾️ Unlimited Plan
+                {% else %}
+                {{ used_this_week }} of {{ weekly_limit }} invites used
+                {% endif %}
+            </span>
+            <span class="small fw-bold" style="color:
+                {% if remaining_invites == 0 %}#c0392b
+                {% elif remaining_invites <= 1 %}#e67e22
+                {% else %}#27ae60{% endif %}">
+                {% if weekly_limit >= 999 %}
+                Unlimited
+                {% else %}
+                {{ remaining_invites }} remaining
+                {% endif %}
+            </span>
+        </div>
+
+        {% if weekly_limit < 999 %} <div class="usage-bar-wrap">
+            <div class="usage-bar-fill
+                {% if usage_percent >= 100 %}danger
+                {% elif usage_percent >= 66 %}warning
+                {% else %}safe{% endif %}" style="width:{{ usage_percent }}%">
+            </div>
+    </div>
+
+    {% if remaining_invites == 0 %}
+    <div class="limit-warning-box mt-3">
+        <div class="limit-icon">🚫</div>
+        <div class="limit-text">
+            <strong>Weekly Limit Reached!</strong><br>
+            <span>You have used all {{ weekly_limit }} invites this week. Resets every 7 days.</span><br>
+            <a href="{% url 'plans_page' %}" class="limit-upgrade-btn">
+                ⚡ Upgrade for More Invites
+            </a>
+        </div>
+    </div>
+    {% elif remaining_invites == 1 %}
+    <div class="mt-2 small" style="color:#e67e22; font-weight:600;">
+        ⚠️ Only 1 invite left this week!
+        <a href="{% url 'plans_page' %}" style="color:var(--primary)">Upgrade →</a>
+    </div>
+    {% endif %}
+
+    {% endif %}
+</div>
+
+<!-- Quick Actions -->
+<div class="row g-4 mb-4">
+    {% if user.is_profile_complete %}
+    <div class="col-6 col-md-3">
+        <a href="{% url 'view_my_profile' %}" class="action-card">
+            <span class="icon">👤</span>
+            <div class="fw-bold small">My Profile</div>
+        </a>
+    </div>
+    {% else %}
+    <div class="col-6 col-md-3">
+        <a href="{% url 'create_profile' %}" class="action-card"
+            style="background:var(--primary)!important; color:#fff!important;">
+            <span class="icon">➕</span>
+            <div class="fw-bold small">Create Profile</div>
+        </a>
+    </div>
+    {% endif %}
+
+    <div class="col-6 col-md-3">
+        <a href="{% url 'search' %}" class="action-card">
+            <span class="icon">🔍</span>
+            <div class="fw-bold small">Search</div>
+        </a>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <a href="{% url 'interests_received' %}" class="action-card position-relative">
+            <span class="icon">💌</span>
+            <div class="fw-bold small">Interests</div>
+            {% if pending_interests > 0 %}
+            <span class="position-absolute top-0 end-0 m-2 badge rounded-pill" style="background:var(--primary)">
+                {{ pending_interests }}
+            </span>
+            {% endif %}
+        </a>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <a href="{% url 'mutual_matches' %}" class="action-card">
+            <span class="icon">🤝</span>
+            <div class="fw-bold small">Matches</div>
+        </a>
+    </div>
+</div>
+
+<!-- Admin Quick Access -->
+{% if user.is_staff %}
+<div class="form-section mb-4" style="border-left:4px solid var(--gold);">
+    <h6 class="fw-bold mb-3" style="color:var(--primary)">
+        <i class="bi bi-shield-check me-2"></i>Admin Panel
+    </h6>
+    <div class="row g-3">
+        <div class="col-6 col-md-4">
+            <a href="{% url 'admin_dashboard' %}" class="action-card text-center text-decoration-none"
+                style="padding:16px;">
+                <div style="font-size:1.5rem;">🛡️</div>
+                <div class="small fw-bold mt-1">Dashboard</div>
+            </a>
+        </div>
+        <div class="col-6 col-md-4">
+            <a href="{% url 'admin_profiles' %}" class="action-card text-center text-decoration-none"
+                style="padding:16px;">
+                <div style="font-size:1.5rem;">👥</div>
+                <div class="small fw-bold mt-1">Profiles</div>
+            </a>
+        </div>
+        <div class="col-6 col-md-4">
+            <a href="{% url 'admin_users' %}" class="action-card text-center text-decoration-none"
+                style="padding:16px;">
+                <div style="font-size:1.5rem;">👤</div>
+                <div class="small fw-bold mt-1">Users</div>
+            </a>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Recent Notifications -->
+{% if recent_notifications %}
+<div class="form-section">
+    <h5 class="form-section-title">
+        <i class="bi bi-bell me-2"></i>Recent Notifications
+    </h5>
+    {% for notification in recent_notifications %}
+    <div class="notification-item
+                    {% if not notification.is_read %}unread{% else %}read{% endif %}">
+        <div class="d-flex align-items-start gap-3">
+            <span style="font-size:1.4rem;">
+                {% if notification.notification_type == 'interest_received' %}💌
+                {% elif notification.notification_type == 'interest_accepted' %}✅
+                {% elif notification.notification_type == 'profile_approved' %}🎉
+                {% elif notification.notification_type == 'profile_rejected' %}❌
+                {% elif notification.notification_type == 'subscription' %}👑
+                {% elif notification.notification_type == 'daily_matches' %}💑
+                {% else %}🔔
+                {% endif %}
+            </span>
+            <div class="flex-fill">
+                <p class="fw-semibold mb-1 small">{{ notification.title }}</p>
+                <p class="text-muted mb-1" style="font-size:0.82rem;">
+                    {{ notification.message }}
+                </p>
+                <p class="text-muted mb-0" style="font-size:0.75rem;">
+                    <i class="bi bi-clock me-1"></i>
+                    {{ notification.created_at|timesince }} ago
+                </p>
+            </div>
+            {% if notification.link %}
+            <a href="{{ notification.link }}" class="text-decoration-none small flex-shrink-0"
+                style="color:var(--primary)">
+                View →
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="text-center mt-3">
+        <a href="/notifications/mark-all-read/" class="text-decoration-none small" style="color:var(--text-muted)">
+            Mark all as read
+        </a>
+    </div>
+</div>
+{% else %}
+<div class="form-section text-center py-4">
+    <div style="font-size:2.5rem;">🔔</div>
+    <p class="text-muted small mt-2 mb-0">No notifications yet</p>
+</div>
+{% endif %}
+
+<!-- Account Settings -->
+<div class="text-center mt-4 pt-3 border-top">
+    <a href="{% url 'delete_account' %}" class="text-danger small text-decoration-none">
+        <i class="bi bi-trash me-1"></i>Delete my account
+    </a>
+</div>
+
+</div>
+{% endblock %}

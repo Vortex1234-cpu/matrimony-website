@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}Delete Account - Rajapalayam Matrimony{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="form-section">
+
+                <!-- Header -->
+                <div class="text-center mb-4">
+                    <div style="font-size:3rem;margin-bottom:12px;color:#8B0000;">
+                        <i class="bi bi-exclamation-triangle"></i>
+                    </div>
+                    <h3 class="fw-bold mb-1" style="color:var(--primary)">
+                        Request Account Deletion
+                    </h3>
+                    <p class="text-muted mb-0">
+                        Your request will be reviewed by an admin before
+                        your account is permanently removed
+                    </p>
+                </div>
+
+                {% if existing_request %}
+                <div class="alert alert-warning text-center" role="alert">
+                    <i class="bi bi-clock-history me-1"></i>
+                    You already have a deletion request pending since
+                    {{ existing_request.requested_at|date:"M d, Y" }}.
+                    An admin will review it soon.
+                </div>
+                <div class="text-center">
+                    <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">
+                        Back to Dashboard
+                    </a>
+                </div>
+                {% else %}
+
+                <!-- Warning -->
+                <div class="alert alert-danger" role="alert">
+                    <strong>Before you go:</strong>
+                    <ul class="mb-0 mt-2 small">
+                        <li>Once approved, your profile will be permanently removed</li>
+                        <li>All matches, messages, and photos will be deleted</li>
+                        <li>You will not be able to recover this account afterward</li>
+                    </ul>
+                </div>
+
+                {% if error %}
+                <div class="alert alert-warning small">{{ error }}</div>
+                {% endif %}
+
+                <!-- Request Form -->
+                <form method="POST" novalidate>
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="bi bi-lock me-1"></i>
+                            Confirm your password *
+                        </label>
+                        <input type="password" name="password" required class="form-control"
+                            placeholder="Enter your current password">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="bi bi-chat-left-text me-1"></i>
+                            Reason (optional)
+                        </label>
+                        <textarea name="reason" class="form-control" rows="3"
+                            placeholder="Let us know why you're leaving (optional)"></textarea>
+                    </div>
+
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" name="confirm" id="confirmCheck" required>
+                        <label class="form-check-label small text-muted" for="confirmCheck">
+                            I understand this action is permanent once approved
+                            and I want to request account deletion
+                        </label>
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary w-50 py-2">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-danger w-50 py-2 fw-bold">
+                            <i class="bi bi-send me-2"></i>Submit Request
+                        </button>
+                    </div>
+                </form>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

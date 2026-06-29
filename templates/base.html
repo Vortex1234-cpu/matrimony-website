@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Rajapalayam Matrimony{% endblock %}</title>
+    <meta name="description"
+        content="Find your perfect life partner through Moon Matrimony. Trusted matrimonial services with verified profiles.">
+
+    <meta name="keywords" content="matrimony, marriage, bride, groom, matrimonial services">
+
+    <meta name="robots" content="index, follow">
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Animate.css -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- HTMX -->
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@1.9.10/dist/htmx.min.js"></script>
+
+    {% load static %}
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon.png' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}">
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=4">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg matrimony-navbar sticky-top">
+        <div class="container">
+            <a class="navbar-brand brand-logo" href="/" style="display:flex; align-items:center; gap:8px;">
+                <img src="{% static 'images/logo.png' %}" alt="Moon Matrimony"
+                    style="height: 48px; width: auto; object-fit: contain; border-radius:8px;">
+                <div style="display:flex; flex-direction:column; line-height:1.2;">
+                    <span
+                        style="font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:#d4af37; letter-spacing:1px; text-shadow:1px 1px 4px rgba(0,0,0,0.4);">Rajapalayam
+                        <span style="color:#ffffff;">Matrimony</span></span>
+                    <span
+                        style="font-size:0.6rem; color:rgba(255,255,255,0.7); letter-spacing:2px; text-transform:uppercase;">Find
+                        Your Perfect Match</span>
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center gap-1">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="bi bi-house"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'search' %}">
+                            <i class="bi bi-search"></i> Search
+                        </a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'interests_received' %}">
+                            <i class="bi bi-envelope-heart"></i> Interests
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'mutual_matches' %}">
+                            <i class="bi bi-people"></i> Matches
+                        </a>
+                    </li>
+                    <!-- ADD THIS -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'my_shortlist' %}">
+                            <i class="bi bi-heart"></i> Shortlist
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dashboard' %}">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-logout px-3 py-1 rounded-pill" href="{% url 'logout' %}">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">
+                            <i class="bi bi-person"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-register px-4 py-2 rounded-pill" href="{% url 'register' %}">
+                            <i class="bi bi-person-plus"></i> Register Free
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-upgrade px-3 py-1 rounded-pill" href="{% url 'plans_page' %}">
+                            <i class="bi bi-crown me-1"></i> Upgrade
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% with messages_list=messages %}
+
+    <!-- FLASH MESSAGES (regular banner — excludes payment_modal messages) -->
+    {% if messages_list %}
+    <div class="container mt-3">
+        {% for message in messages_list %}
+        {% if 'payment_modal' not in message.tags %}
+        <div class="alert alert-{{ message.tags }}
+            alert-dismissible fade show
+            animate__animated animate__fadeInDown" role="alert">
+            {{ message|safe }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- PAYMENT RESULT MODAL -->
+    {% for message in messages_list %}
+    {% if 'payment_modal' in message.tags %}
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center p-4 animate__animated animate__zoomIn"
+                style="border-radius:18px; border:none;">
+                <div class="modal-body">
+                    {% if 'success' in message.tags %}
+                    <div style="font-size:3rem; color:#1e7e34;">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                    <h4 class="mt-3 mb-2" style="font-family:'Playfair Display',serif; color:#1e7e34;">
+                        Payment Successful!
+                    </h4>
+                    {% else %}
+                    <div style="font-size:3rem; color:#c0392b;">
+                        <i class="bi bi-x-circle-fill"></i>
+                    </div>
+                    <h4 class="mt-3 mb-2" style="font-family:'Playfair Display',serif; color:#c0392b;">
+                        Payment Failed
+                    </h4>
+                    {% endif %}
+                    <p class="text-muted mb-4">{{ message|safe }}</p>
+                    <button type="button" class="btn-matrimony-primary px-4 py-2"
+                        style="border-radius:30px; border:none;" data-bs-dismiss="modal">
+                        {% if 'success' in message.tags %}Continue{% else %}Close{% endif %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    {% endwith %}
+
+    <!-- MAIN CONTENT -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer
+        style="background:linear-gradient(180deg,#100304 0%,#080102 100%);position:relative;overflow:hidden;padding:60px 0 28px;margin-top:0;">
+
+        <!-- Top gold border -->
+        <div
+            style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,#8B1A1A,#C8972B,#8B1A1A);">
+        </div>
+
+        <style>
+            .footer-link {
+                display: block;
+                color: rgba(255, 255, 255, 0.55);
+                font-size: 0.865rem;
+                padding: 5px 0;
+                text-decoration: none;
+                transition: all 0.2s;
+            }
+
+            .footer-link:hover {
+                color: #E8B84B;
+                padding-left: 6px;
+            }
+
+            .footer-section-title {
+                font-size: 0.68rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 1.5px;
+                color: rgba(255, 255, 255, 0.32);
+                margin-bottom: 14px;
+            }
+
+            .footer-bottom-link {
+                font-size: 0.75rem;
+                color: rgba(255, 255, 255, 0.3);
+                text-decoration: none;
+                transition: color 0.2s;
+            }
+
+            .footer-bottom-link:hover {
+                color: #E8B84B;
+            }
+
+            @media (max-width: 767px) {
+                .footer-grid {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 32px;
+                }
+
+                .footer-links-row {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 24px;
+                }
+
+                .footer-bottom-bar {
+                    flex-direction: column !important;
+                    align-items: flex-start !important;
+                    gap: 12px !important;
+                }
+
+                .footer-bottom-links {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 12px 18px;
+                }
+            }
+
+            @media (min-width: 768px) {
+                .footer-grid {
+                    display: grid;
+                    grid-template-columns: 2fr 1fr 1fr 2fr;
+                    gap: 32px;
+                }
+
+                .footer-links-row {
+                    display: contents;
+                }
+            }
+        </style>
+
+        <div class="container">
+            <div class="footer-grid mb-4">
+
+                <!-- Brand -->
+                <div>
+                    <div class="mb-3 d-flex align-items-center gap-2">
+                        <div style="font-size:1.5rem;">💍</div>
+                        <div>
+                            <div
+                                style="font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;color:#E8B84B;line-height:1.1;">
+                                Rajapalayam Matrimony
+                            </div>
+                            <div
+                                style="font-size:0.6rem;color:rgba(255,255,255,0.35);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;">
+                                Find Your Perfect Match
+                            </div>
+                        </div>
+                    </div>
+                    <p style="font-size:0.845rem;color:rgba(255,255,255,0.48);line-height:1.8;margin-bottom:18px;">
+                        A trusted matrimony platform for Tamil families.
+                        Safe, verified profiles from your own community.
+                        Connecting hearts since 2024.
+                    </p>
+                    <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);line-height:2.1;">
+                        <div><i class="bi bi-envelope me-2"
+                                style="color:#C8972B;"></i>rajapalayammatrimony.com@gmail.com</div>
+                        <div><i class="bi bi-telephone me-2" style="color:#C8972B;"></i>+91 75 023 023 33</div>
+                        <div><i class="bi bi-geo-alt me-2" style="color:#C8972B;"></i>23, Sankarankovil Road, Near New
+                            Bus Stand, Rajapalayam, Tamil Nadu — 626117</div>
+                    </div>
+                </div>
+
+                <!-- Quick Links + Company (side by side on mobile via grid) -->
+                <div class="footer-links-row">
+
+                    <!-- Quick Links -->
+                    <div>
+                        <div class="footer-section-title">Quick Links</div>
+                        <a href="/" class="footer-link">Home</a>
+                        <a href="{% url 'search' %}" class="footer-link">Browse Profiles</a>
+                        <a href="{% url 'register' %}" class="footer-link">Register Free</a>
+                        <a href="{% url 'login' %}" class="footer-link">Login</a>
+                        <a href="{% url 'plans_page' %}" class="footer-link">Membership Plans</a>
+                    </div>
+
+                    <!-- Company -->
+                    <div>
+                        <div class="footer-section-title">Company</div>
+                        <a href="{% url 'about_us' %}" class="footer-link">About Us</a>
+                        <a href="{% url 'contact_us' %}" class="footer-link">Contact Us</a>
+                        <a href="{% url 'plans_page' %}" class="footer-link">Pricing</a>
+                    </div>
+
+                </div>
+
+                <!-- Legal + Badges -->
+                <div>
+                    <div class="footer-section-title">Legal</div>
+                    <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy Policy</a>
+                    <a href="{% url 'terms_conditions' %}" class="footer-link">Terms & Conditions</a>
+                    <a href="{% url 'refund_policy' %}" class="footer-link">Refund & Cancellation Policy</a>
+
+                    <!-- Age Restriction -->
+                    <div class="mt-4 p-3"
+                        style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;">
+                        <div style="font-size:0.8rem;color:rgba(255,255,255,0.75);font-weight:600;margin-bottom:5px;">🔞
+                            Age Restriction</div>
+                        <p style="font-size:0.76rem;color:rgba(255,255,255,0.45);margin:0;line-height:1.6;">
+                            Rajapalayam Matrimony is strictly for users
+                            <strong style="color:rgba(255,255,255,0.72);">18 years and above.</strong>
+                            Underage users will be immediately removed.
+                        </p>
+                    </div>
+
+                    <!-- Payment Badges -->
+                    <div class="mt-3 p-3"
+                        style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;">
+                        <div style="font-size:0.72rem;color:rgba(255,255,255,0.38);margin-bottom:9px;">Secure Payments
+                            by</div>
+                        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                            <span
+                                style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.75);font-size:0.75rem;font-weight:600;padding:4px 12px;border-radius:6px;">💳
+                                Cashfree</span>
+                            <span
+                                style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.75);font-size:0.75rem;font-weight:600;padding:4px 12px;border-radius:6px;">🔒
+                                SSL Secured</span>
+                            <span
+                                style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.75);font-size:0.75rem;font-weight:600;padding:4px 12px;border-radius:6px;">✅
+                                Verified</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="footer-bottom-bar"
+                style="border-top:1px solid rgba(255,255,255,0.07);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                <div style="font-size:0.78rem;color:rgba(255,255,255,0.3);">
+                    © 2024 Rajapalayam Matrimony Services. All rights reserved. Rajapalayam, Tamil Nadu, India.
+                </div>
+                <div class="footer-bottom-links">
+                    <a href="{% url 'privacy_policy' %}" class="footer-bottom-link">Privacy Policy</a>
+                    <a href="{% url 'terms_conditions' %}" class="footer-bottom-link">Terms & Conditions</a>
+                    <a href="{% url 'refund_policy' %}" class="footer-bottom-link">Refund Policy</a>
+                    <a href="{% url 'contact_us' %}" class="footer-bottom-link">Contact Us</a>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    {% block scripts %}{% endblock %}
+
+    <!-- HTMX Config -->
+    <script>
+        htmx.config.defaultSwapStyle = 'innerHTML';
+        htmx.config.defaultSettleDelay = 0;
+        htmx.config.historyCacheSize = 0;
+        htmx.config.refreshOnHistoryMiss = false;
+        htmx.config.timeout = 10000;
+    </script>
+
+    <!-- Auto dismiss alerts -->
+    <script>
+        setTimeout(function () {
+            document.querySelectorAll('.alert').forEach(function (alert) {
+                var bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+                if (bsAlert) bsAlert.close();
+            });
+        }, 5000);
+    </script>
+
+    <!-- Auto-show payment result modal -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var modalEl = document.getElementById('paymentModal');
+            if (modalEl) {
+                var modal = new bootstrap.Modal(modalEl);
+                modal.show();
+            }
+        });
+    </script>
+
+    <!-- Scroll Reveal -->
+    <script>
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            },
+            { threshold: 0.1 }
+        );
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+
+</body>
+
+</html>

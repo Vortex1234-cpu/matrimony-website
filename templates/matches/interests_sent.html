@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% block title %}Interests Sent - TownMatrimony{% endblock %}
+
+{% block content %}
+<style>
+    .interest-card {
+        transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+        border: 1.5px solid transparent !important;
+    }
+
+    .interest-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(123, 29, 29, 0.13) !important;
+        border-color: rgba(123, 29, 29, 0.12) !important;
+    }
+
+    .view-profile-link {
+        color: #7B1D1D;
+        font-size: 0.83rem;
+        text-decoration: none;
+        transition: color 0.2s;
+        font-weight: 500;
+    }
+
+    .view-profile-link:hover {
+        color: #a02020;
+        text-decoration: underline;
+    }
+
+    .nav-pills .nav-link {
+        color: #7B1D1D !important;
+        border: 1.5px solid transparent;
+        transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    }
+
+    .nav-pills .nav-link:hover:not(.active) {
+        background: rgba(123, 29, 29, 0.08) !important;
+        border-color: rgba(123, 29, 29, 0.18);
+        transform: translateY(-1px);
+    }
+
+    .nav-pills .nav-link.active {
+        background: #7B1D1D !important;
+        color: #fff !important;
+    }
+
+    .avatar-placeholder {
+        transition: transform 0.2s;
+    }
+
+    .interest-card:hover .avatar-placeholder {
+        transform: scale(1.05);
+    }
+
+    .btn-browse {
+        background: #7B1D1D;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 9px 24px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+
+    .btn-browse:hover {
+        background: #a02020 !important;
+        color: #fff !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(123, 29, 29, 0.25);
+    }
+
+    .btn-browse:active {
+        transform: scale(0.97);
+        background: #5c0000 !important;
+    }
+</style>
+
+<div class="container py-4" style="max-width:860px;">
+
+    <div class="mb-3">
+        <h1 class="h4 fw-bold mb-1">📤 Interests Sent</h1>
+        <p class="text-muted small mb-0">Track all interests you have sent</p>
+    </div>
+
+    <ul class="nav nav-pills mb-4 gap-1">
+        <li class="nav-item">
+            <a class="nav-link {% if not status_filter %}active{% endif %}" href="{% url 'interests_sent' %}">All</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if status_filter == 'pending' %}active{% endif %}" href="?status=pending">⏳
+                Pending</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if status_filter == 'accepted' %}active{% endif %}" href="?status=accepted">✅
+                Accepted</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if status_filter == 'rejected' %}active{% endif %}" href="?status=rejected">❌
+                Rejected</a>
+        </li>
+    </ul>
+
+    {% if interests %}
+    <div class="d-flex flex-column gap-3">
+        {% for interest in interests %}
+        <div class="bg-white rounded-4 shadow-sm p-4 d-flex align-items-center gap-3 flex-wrap interest-card">
+
+            {% if interest.receiver.profile.profile_photo %}
+            <img src="{{ interest.receiver.profile.profile_photo.url }}"
+                class="rounded-circle object-fit-cover flex-shrink-0 avatar-placeholder"
+                style="width:64px;height:64px;border:3px solid #fde8e8;" alt="{{ interest.receiver.first_name }}">
+            {% else %}
+            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 fs-3 avatar-placeholder"
+                style="width:64px;height:64px;background:#fde8e8;border:3px solid #fde8e8;">👤</div>
+            {% endif %}
+
+            <div class="flex-grow-1">
+                <h3 class="fw-bold text-dark mb-1 fs-6">{{ interest.receiver.first_name }}</h3>
+                {% if interest.receiver.profile %}
+                <p class="text-muted small mb-0">{{ interest.receiver.profile.age }} yrs · {{
+                    interest.receiver.profile.city }}</p>
+                <p class="text-muted small mb-0">{{ interest.receiver.profile.religion }}</p>
+                {% endif %}
+                <p class="text-muted mb-0" style="font-size:0.75rem;">Sent: {{ interest.sent_at|date:"d M Y" }}</p>
+            </div>
+
+            <div class="d-flex flex-column gap-2 align-items-end flex-shrink-0">
+                <a href="/profiles/{{ interest.receiver.profile.id }}/" class="view-profile-link">View Profile →</a>
+                {% if interest.status == 'pending' %}
+                <span class="badge rounded-pill px-3 py-2 bg-warning text-dark">⏳ Pending</span>
+                {% elif interest.status == 'accepted' %}
+                <span class="badge rounded-pill px-3 py-2 bg-success">✅ Accepted</span>
+                {% else %}
+                <span class="badge rounded-pill px-3 py-2 bg-danger">❌ Rejected</span>
+                {% endif %}
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="bg-white rounded-4 shadow-sm p-5 text-center">
+        <div class="fs-1 mb-3">📤</div>
+        <h3 class="h6 fw-semibold text-secondary mb-2">No interests sent yet</h3>
+        <p class="text-muted small mb-3">Browse profiles and send interests to get started</p>
+        <a href="{% url 'search' %}" class="btn-browse">Browse Profiles</a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,315 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} - TownMatrimony{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+
+            <!-- Header -->
+            <div class="form-section mb-4">
+                <h3 class="fw-bold mb-1" style="color:var(--primary)">
+                    <i class="bi bi-person-plus me-2"></i>
+                    {{ title }}
+                </h3>
+                <p class="text-muted mb-0">
+                    Fill in your details to find your perfect match
+                </p>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- SECTION 1: Basic Info -->
+                <div class="form-section mb-4">
+                    <h5 class="form-section-title">
+                        👤 Basic Information
+                    </h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Full Name *
+                            </label>
+                            {{ form.full_name }}
+                            {% if form.full_name.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.full_name.errors.0 }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Date of Birth *
+                            </label>
+                            {{ form.date_of_birth }}
+                            {% if form.date_of_birth.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.date_of_birth.errors.0 }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Religion *
+                            </label>
+                            {{ form.religion }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Marital Status *
+                            </label>
+                            {{ form.marital_status }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Caste</label>
+                            {{ form.caste }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Subcaste</label>
+                            {{ form.subcaste }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Mother Tongue
+                            </label>
+                            {{ form.mother_tongue }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2: Physical -->
+                <div class="form-section mb-4">
+                    <h5 class="form-section-title">
+                        📏 Physical Details
+                    </h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Height (cm)
+                            </label>
+                            {{ form.height_cm }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Weight (kg)
+                            </label>
+                            {{ form.weight_kg }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Skin Tone
+                            </label>
+                            {{ form.skin_tone }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Body Type
+                            </label>
+                            {{ form.body_type }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 3: Education & Career -->
+                <div class="form-section mb-4">
+                    <h5 class="form-section-title">
+                        🎓 Education & Career
+                    </h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Education
+                            </label>
+                            {{ form.education }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Education Detail
+                            </label>
+                            {{ form.education_detail }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Employment Type
+                            </label>
+                            {{ form.employment_type }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Job Title
+                            </label>
+                            {{ form.job_title }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Company</label>
+                            {{ form.company }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Annual Income (₹)
+                            </label>
+                            {{ form.annual_income }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 4: Location -->
+                <div class="form-section mb-4">
+                    <h5 class="form-section-title">
+                        📍 Location
+                    </h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">City</label>
+                            {{ form.city }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                District
+                            </label>
+                            {{ form.district }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">State</label>
+                            {{ form.state }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Country</label>
+                            {{ form.country }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 5: Family -->
+                <div class="form-section mb-4">
+                    <h5 class="form-section-title">
+                        👨‍👩‍👧‍👦 Family Details
+                    </h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Father Name
+                            </label>
+                            {{ form.father_name }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Father Occupation
+                            </label>
+                            {{ form.father_occupation }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Mother Name
+                            </label>
+                            {{ form.mother_name }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Mother Occupation
+                            </label>
+                            {{ form.mother_occupation }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">
+                                Brothers
+                            </label>
+                            {{ form.brothers }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Sisters</label>
+                            {{ form.sisters }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">
+                                Family Type
+                            </label>
+                            {{ form.family_type }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">
+                                Family Status
+                            </label>
+                            {{ form.family_status }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 6: Horoscope -->
+                <div class="form-section mb-4">
+                    <h5 class="form-section-title">
+                        🔯 Horoscope Details
+                    </h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Star (Natchathiram)
+                            </label>
+                            {{ form.star }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Rasi</label>
+                            {{ form.rasi }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Lagnam</label>
+                            {{ form.lagnam }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">
+                                Chevvai Dosham
+                            </label>
+                            {{ form.chevvai_dosham }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">
+                                Sarpa Dosham
+                            </label>
+                            {{ form.sarpa_dosham }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 7: Photo & About -->
+                <div class="form-section mb-4">
+                    <h5 class="form-section-title">
+                        📸 Photo & About
+                    </h5>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label">
+                                Profile Photo
+                            </label>
+                            {{ form.profile_photo }}
+                            <div class="form-text">
+                                Upload a clear face photo.
+                                JPG/PNG only. Max 5MB.
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">
+                                About Me
+                            </label>
+                            {{ form.about }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <div class="d-flex gap-3 mb-5">
+                    <button type="submit" class="btn-matrimony-primary
+                                   flex-fill py-3 fs-5">
+                        <i class="bi bi-save me-2"></i>
+                        Save Profile
+                    </button>
+                    <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary
+                              px-5 py-3 rounded-pill">
+                        Cancel
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block title %}Login - Rajapalayam Matrimony{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="form-section">
+
+                <!-- Header -->
+                <div class="text-center mb-4">
+                    <div style="font-size:3rem;margin-bottom:12px;">
+                        💍
+                    </div>
+                    <h3 class="fw-bold mb-1" style="color:var(--primary)">
+                        Welcome Back
+                    </h3>
+                    <p class="text-muted mb-0">
+                        Login to your Rajapalayam Matrimony account
+                    </p>
+                </div>
+
+                <!-- Login Form -->
+                <form method="POST" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Username -->
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="bi bi-person me-1"></i>
+                            Username *
+                        </label>
+                        <input type="text" name="username" required class="form-control"
+                            placeholder="Enter username or phone">
+                        {% if form.username.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ form.username.errors.0 }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-1">
+                        <label class="form-label">
+                            <i class="bi bi-lock me-1"></i>
+                            Password *
+                        </label>
+                        <div class="position-relative">
+                            <input type="password" name="password" id="passwordInput" required class="form-control pe-5"
+                                placeholder="Enter your password">
+                            <button type="button" id="togglePassword" class="position-absolute border-0
+                                           bg-transparent" style="right:12px;top:50%;
+                                           transform:translateY(-50%);
+                                           color:var(--text-muted);
+                                           cursor:pointer;">
+                                <i class="bi bi-eye fs-5" id="eyeIcon"></i>
+                            </button>
+                        </div>
+                        {% if form.password.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ form.password.errors.0 }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- ✅ FORGOT PASSWORD LINK -->
+                    <div class="text-end mb-4 mt-2">
+                        <a href="{% url 'password_reset' %}" class="text-decoration-none small
+                                  fw-semibold" style="color:var(--primary)">
+                            <i class="bi bi-key me-1"></i>
+                            Forgot Password?
+                        </a>
+                    </div>
+
+                    <!-- Login Button -->
+                    <button type="submit" class="btn-matrimony-primary
+                                   w-100 py-3 fs-5 mb-3">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>
+                        Login
+                    </button>
+
+                </form>
+
+                <!-- Divider -->
+                <div class="d-flex align-items-center gap-3 my-3">
+                    <hr class="flex-fill">
+                    <span class="text-muted small">OR</span>
+                    <hr class="flex-fill">
+                </div>
+
+                <!-- Register Link -->
+                <p class="text-center text-muted small mb-3">
+                    Don't have an account?
+                    <a href="{% url 'register' %}" class="fw-bold text-decoration-none" style="color:var(--primary)">
+                        Register Free
+                    </a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('togglePassword')
+        .addEventListener('click', function () {
+            const pwd = document.getElementById('passwordInput');
+            const icon = document.getElementById('eyeIcon');
+            if (pwd.type === 'password') {
+                pwd.type = 'text';
+                icon.className = 'bi bi-eye-slash fs-5';
+            } else {
+                pwd.type = 'password';
+                icon.className = 'bi bi-eye fs-5';
+            }
+        });
+</script>
+{% endblock %}

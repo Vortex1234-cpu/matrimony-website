@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #fff8f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(139, 0, 0, 0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #5c0000, #8B0000);
+            padding: 35px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #d4af37;
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            margin: 8px 0 0;
+        }
+
+        .body {
+            padding: 35px 30px;
+        }
+
+        .highlight-box {
+            background: #fff3cd;
+            border-left: 4px solid #d4af37;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 20px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #8B0000, #c0392b);
+            color: #fff !important;
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            margin: 20px 0;
+        }
+
+        .footer {
+            background: #f8f8f8;
+            padding: 20px 30px;
+            text-align: center;
+            color: #888;
+            font-size: 0.82rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💍 TownMatrimony</h1>
+            <p>You have a new interest!</p>
+        </div>
+        <div class="body">
+            <p style="font-size:1.1rem;">
+                Hello <strong>{{ receiver_name }}</strong>,
+            </p>
+            <p style="color:#555;">
+                Great news! Someone is interested in your profile.
+            </p>
+            <div class="highlight-box">
+                <strong>💌 {{ sender_name }}</strong> has sent
+                you an interest request.<br>
+                <span style="color:#888;font-size:0.88rem;">
+                    View their profile and respond today!
+                </span>
+            </div>
+            <p style="color:#555;">
+                Login to your account to accept or reject
+                this interest request.
+            </p>
+            <div style="text-align:center;">
+                <a href="{{ site_url }}/matches/received/" class="btn">
+                    View Interest →
+                </a>
+            </div>
+        </div>
+        <div class="footer">
+            © 2024 TownMatrimony. All rights reserved.<br>
+            Tiruchirappalli, Tamil Nadu
+        </div>
+    </div>
+</body>
+
+</html>

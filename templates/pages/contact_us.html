@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% block title %}Contact Us - Rajapalayam Matrimony{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+
+            <!-- Header -->
+            <div class="form-section mb-4 text-center"
+                style="background:linear-gradient(135deg,var(--primary-dark),var(--primary));padding:40px 20px;">
+                <h1 style="font-family:'Playfair Display',serif;font-size:2rem;color:#fff;margin-bottom:8px;">
+                    Contact Us
+                </h1>
+                <p style="color:rgba(255,255,255,0.75);margin:0;font-size:0.9rem;">
+                    We are here to help you. Reach us anytime.
+                </p>
+            </div>
+
+            <div class="row g-4">
+
+                <!-- Contact Info Cards -->
+                <div class="col-md-5">
+
+                    <!-- Phone -->
+                    <div class="form-section mb-3">
+                        <div class="d-flex align-items-center gap-3 flex-wrap">
+                            <div
+                                style="width:48px;height:48px;background:linear-gradient(135deg,#fde8e8,#fce4ec);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">
+                                📞
+                            </div>
+                            <div style="min-width:0;flex:1;">
+                                <div
+                                    style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:3px;">
+                                    Phone / WhatsApp
+                                </div>
+                                <div
+                                    style="font-size:0.92rem;font-weight:600;color:var(--text-dark);word-break:break-word;">
+                                    +91 75 023 023 33
+                                </div>
+                                <div style="font-size:0.76rem;color:var(--text-muted);">
+                                    Mon–Sat, 9 AM – 6 PM IST
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-section mb-3">
+                        <div class="d-flex align-items-center gap-3 flex-wrap">
+                            <div
+                                style="width:48px;height:48px;background:linear-gradient(135deg,#fde8e8,#fce4ec);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">
+                                ✉️
+                            </div>
+                            <div style="min-width:0;flex:1;">
+                                <div
+                                    style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:3px;">
+                                    Email Support
+                                </div>
+                                <div
+                                    style="font-size:0.85rem;font-weight:600;color:var(--text-dark);word-break:break-all;overflow-wrap:anywhere;">
+                                    rajapalayammatrimony.com@gmail.com
+                                </div>
+                                <div style="font-size:0.76rem;color:var(--text-muted);">
+                                    Reply within 24 hours
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="form-section mb-3">
+                        <div class="d-flex align-items-center gap-3 flex-wrap">
+                            <div
+                                style="width:48px;height:48px;background:linear-gradient(135deg,#fde8e8,#fce4ec);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">
+                                📍
+                            </div>
+                            <div style="min-width:0;flex:1;">
+                                <div
+                                    style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:3px;">
+                                    Office Address
+                                </div>
+                                <div style="font-size:0.88rem;font-weight:600;color:var(--text-dark);">
+                                    Rajapalayam Matrimony
+                                </div>
+                                <div style="font-size:0.8rem;color:var(--text-muted);line-height:1.5;">
+                                    23, Sankarankovil Road, Near New Bus
+                                    Stand, Rajapalayam, Tamil Nadu,
+                                    India — 626117
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hours -->
+                    <div class="form-section mb-3">
+                        <div class="d-flex align-items-center gap-3 flex-wrap">
+                            <div
+                                style="width:48px;height:48px;background:linear-gradient(135deg,#fde8e8,#fce4ec);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">
+                                🕐
+                            </div>
+                            <div style="min-width:0;flex:1;">
+                                <div
+                                    style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:3px;">
+                                    Working Hours
+                                </div>
+                                <div style="font-size:0.88rem;font-weight:600;color:var(--text-dark);">
+                                    Monday – Saturday
+                                </div>
+                                <div style="font-size:0.8rem;color:var(--text-muted);">
+                                    9:00 AM – 6:00 PM IST
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div class="form-section">
+                        <div class="form-section-title">Quick Links</div>
+                        <div class="d-flex flex-column gap-2">
+                            <a href="{% url 'about_us' %}" class="text-decoration-none d-flex align-items-center gap-2"
+                                style="color:var(--primary);font-size:0.86rem;font-weight:500;">
+                                <i class="bi bi-info-circle"></i> About Us
+                            </a>
+                            <a href="{% url 'privacy_policy' %}"
+                                class="text-decoration-none d-flex align-items-center gap-2"
+                                style="color:var(--primary);font-size:0.86rem;font-weight:500;">
+                                <i class="bi bi-shield-check"></i> Privacy Policy
+                            </a>
+                            <a href="{% url 'terms_conditions' %}"
+                                class="text-decoration-none d-flex align-items-center gap-2"
+                                style="color:var(--primary);font-size:0.86rem;font-weight:500;">
+                                <i class="bi bi-file-text"></i> Terms & Conditions
+                            </a>
+                            <a href="{% url 'refund_policy' %}"
+                                class="text-decoration-none d-flex align-items-center gap-2"
+                                style="color:var(--primary);font-size:0.86rem;font-weight:500;">
+                                <i class="bi bi-arrow-return-left"></i> Refund Policy
+                            </a>
+                            <a href="{% url 'plans_page' %}"
+                                class="text-decoration-none d-flex align-items-center gap-2"
+                                style="color:var(--primary);font-size:0.86rem;font-weight:500;">
+                                <i class="bi bi-credit-card"></i> Membership Plans
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Contact Form -->
+                <div class="col-md-7">
+                    <div class="form-section">
+                        <div class="form-section-title">Send Us a Message</div>
+
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} mb-3">
+                            {{ message|safe }}
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+
+                        <form method="POST" action="{% url 'contact_us' %}">
+                            {% csrf_token %}
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-12 col-sm-6">
+                                    <label class="form-label">Your Name *</label>
+                                    <input type="text" name="name" required class="form-control"
+                                        placeholder="Enter your full name">
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <label class="form-label">Phone Number *</label>
+                                    <input type="tel" name="phone" required class="form-control"
+                                        placeholder="10-digit mobile number" maxlength="10">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" name="email" class="form-control" placeholder="your@email.com">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Subject *</label>
+                                <select name="subject" required class="form-select">
+                                    <option value="">Select a subject</option>
+                                    <option>Account / Registration Issue</option>
+                                    <option>Profile Approval Query</option>
+                                    <option>Payment / Subscription Issue</option>
+                                    <option>Refund Request</option>
+                                    <option>Report a Profile</option>
+                                    <option>Technical Problem</option>
+                                    <option>General Enquiry</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">Message *</label>
+                                <textarea name="message" required class="form-control" rows="5"
+                                    placeholder="Please describe your query in detail."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn-matrimony-primary w-100 py-3">
+                                <i class="bi bi-send me-2"></i>
+                                Send Message
+                            </button>
+
+                            <p class="text-muted text-center mt-3" style="font-size:0.78rem;">
+                                We typically respond within 24 hours on working days.
+                            </p>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% block title %}Mutual Matches - TownMatrimony{% endblock %}
+
+{% block content %}
+<style>
+    .match-card {
+        transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+        border: 1.5px solid transparent !important;
+    }
+
+    .match-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 14px 36px rgba(123, 29, 29, 0.14) !important;
+        border-color: rgba(123, 29, 29, 0.13) !important;
+    }
+
+    .match-avatar {
+        transition: transform 0.2s;
+    }
+
+    .match-card:hover .match-avatar {
+        transform: scale(1.07);
+    }
+
+    .btn-view-match {
+        background: #7B1D1D;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 18px;
+        font-size: 0.83rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+        white-space: nowrap;
+    }
+
+    .btn-view-match:hover {
+        background: #a02020 !important;
+        color: #fff !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(123, 29, 29, 0.25);
+    }
+
+    .btn-view-match:active {
+        transform: scale(0.96);
+        background: #5c0000 !important;
+    }
+
+    .btn-browse {
+        background: #7B1D1D;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 9px 24px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+
+    .btn-browse:hover {
+        background: #a02020 !important;
+        color: #fff !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(123, 29, 29, 0.25);
+    }
+
+    .btn-browse:active {
+        transform: scale(0.97);
+        background: #5c0000 !important;
+    }
+</style>
+
+<div class="container py-4" style="max-width:860px;">
+
+    <div class="mb-4">
+        <h1 class="h4 fw-bold mb-1">🤝 Mutual Matches</h1>
+        <p class="text-muted small mb-0">Profiles where both of you accepted each other</p>
+    </div>
+
+    {% if profiles %}
+    <div class="row g-3">
+        {% for profile in profiles %}
+        <div class="col-12 col-md-6">
+            <div class="bg-white rounded-4 shadow-sm p-4 d-flex align-items-center gap-3 h-100 match-card">
+
+                {% if profile.profile_photo %}
+                <img src="{{ profile.profile_photo.url }}"
+                    class="rounded-circle object-fit-cover flex-shrink-0 match-avatar" style="width:64px;height:64px;"
+                    alt="{{ profile.full_name }}">
+                {% else %}
+                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 fs-3 match-avatar"
+                    style="width:64px;height:64px;background:#fde8e8;">👤</div>
+                {% endif %}
+
+                <div class="flex-grow-1 min-width-0">
+                    <h3 class="fw-bold text-dark mb-1 fs-6">{{ profile.full_name }}</h3>
+                    <p class="text-muted small mb-1">{{ profile.age }} yrs · {{ profile.city }}</p>
+                    <span class="badge rounded-pill bg-success px-2 py-1" style="font-size:0.7rem;">✅ Mutual
+                        Match</span>
+                </div>
+
+                <a href="/profiles/{{ profile.id }}/" class="btn-view-match flex-shrink-0">View</a>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="bg-white rounded-4 shadow-sm p-5 text-center">
+        <div class="fs-1 mb-3">🤝</div>
+        <h3 class="h6 fw-semibold text-secondary mb-2">No mutual matches yet</h3>
+        <p class="text-muted small mb-4">When both you and a profile accept each other it will appear here</p>
+        <a href="{% url 'search' %}" class="btn-browse">Browse Profiles</a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

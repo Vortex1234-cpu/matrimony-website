@@ -1,0 +1,260 @@
+{% extends 'base.html' %}
+{% block title %}Membership Plans - Rajapalayam Matrimony{% endblock %}
+
+{% block content %}
+
+<!-- Membership Plans -->
+
+<section style="padding:90px 0;background:var(--cream);">
+    <div class="container">
+
+        ```
+        <div class="text-center mb-5">
+            <span style="background:var(--soft-pink);
+                     color:var(--primary);
+                     padding:6px 18px;
+                     border-radius:50px;
+                     font-size:0.85rem;
+                     font-weight:600;">
+                Membership Plans
+            </span>
+
+            <h2 class="fw-bold mt-3 mb-2" style="color:var(--primary)">
+                Simple & Affordable Plans
+            </h2>
+
+            <p class="text-muted">
+                Start free, upgrade when you need more
+            </p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+
+            <!-- Free Plan -->
+            <div class="col-md-4">
+                <div class="matrimony-card h-100 p-4 text-center">
+
+                    <div style="font-size:2.5rem;">🆓</div>
+
+                    <h4 class="fw-bold mt-3" style="color:var(--primary)">
+                        Free
+                    </h4>
+
+                    <div style="font-size:2.5rem;font-weight:800;color:var(--primary)">
+                        ₹0
+                    </div>
+
+                    <p class="text-muted small">Forever</p>
+
+                    <ul class="list-unstyled text-start mt-3 mb-4">
+                        <li class="py-2 border-bottom">✅ Create Profile</li>
+                        <li class="py-2 border-bottom">✅ Browse Profiles</li>
+                        <li class="py-2">⚠️ 3 Interests / Week</li>
+                    </ul>
+
+                    <a href="{% url 'register' %}" class="btn-matrimony-primary d-block py-2 text-decoration-none">
+                        Get Started Free
+                    </a>
+
+                </div>
+            </div>
+
+            <!-- Silver Plan -->
+            <div class="col-md-4">
+                <div class="matrimony-card h-100 p-4 text-center">
+
+                    <div style="font-size:2.5rem;">🥈</div>
+
+                    <h4 class="fw-bold mt-3" style="color:var(--primary)">
+                        Silver
+                    </h4>
+
+                    <div style="font-size:2.5rem;font-weight:800;color:var(--primary)">
+                        ₹999
+                    </div>
+
+                    <p class="text-muted small">3 Months</p>
+
+                    <ul class="list-unstyled text-start mt-3 mb-4">
+                        <li class="py-2 border-bottom">✅ 30 Interests / Week</li>
+                        <li class="py-2 border-bottom">✅ View Contact Numbers</li>
+                        <li class="py-2">✅ Silver Badge</li>
+                    </ul>
+
+                    <a href="{% url 'buy_plan' 'silver' %}"
+                        class="btn-matrimony-primary d-block py-2 text-decoration-none">
+                        Get Silver
+                    </a>
+
+                </div>
+            </div>
+
+            <!-- Gold Plan -->
+            <div class="col-md-4">
+                <div class="matrimony-card h-100 p-4 text-center" style="border:2px solid var(--gold)!important;">
+
+                    <div style="background:linear-gradient(135deg,var(--gold),var(--gold-light));
+                            color:var(--primary-dark);
+                            font-size:0.8rem;
+                            font-weight:700;
+                            padding:4px 12px;
+                            border-radius:50px;
+                            display:inline-block;
+                            margin-bottom:12px;">
+                        ⭐ MOST POPULAR
+                    </div>
+
+                    <div style="font-size:2.5rem;">🥇</div>
+
+                    <h4 class="fw-bold mt-3" style="color:var(--primary)">
+                        Gold
+                    </h4>
+
+                    <div style="font-size:2.5rem;font-weight:800;color:var(--primary)">
+                        ₹1999
+                    </div>
+
+                    <p class="text-muted small">6 Months</p>
+
+                    <ul class="list-unstyled text-start mt-3 mb-4">
+                        <li class="py-2 border-bottom">✅ Unlimited Interests</li>
+                        <li class="py-2 border-bottom">✅ Send Messages</li>
+                        <li class="py-2">✅ Priority Listing</li>
+                    </ul>
+
+                    <a href="{% url 'buy_plan' 'gold' %}" class="btn-matrimony-gold d-block py-2 text-decoration-none">
+                        Get Gold
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    ```
+
+</section>
+
+<div class="container py-5">
+
+    {% if subscription %}
+
+    <div class="form-section mb-5" style="border-left:5px solid var(--gold);">
+
+        ```
+        <div class="d-flex justify-content-between align-items-start mb-4">
+
+            <div>
+                <h4 class="fw-bold mb-1" style="color:var(--primary)">
+                    <i class="bi bi-crown me-2"></i>
+                    Active Subscription
+                </h4>
+
+                <span class="badge-accepted">
+                    ✅ Plan Active
+                </span>
+            </div>
+
+            <div style="font-size:3rem;">
+                {% if subscription.plan.name == 'silver' %}
+                🥈
+                {% else %}
+                🥇
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="row g-3">
+
+            <div class="col-md-6">
+                <div class="p-3 rounded-3" style="background:var(--soft-pink)">
+                    <div class="text-muted small">Plan</div>
+                    <div class="fw-bold">{{ subscription.plan.get_name_display }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="p-3 rounded-3" style="background:var(--soft-pink)">
+                    <div class="text-muted small">Amount Paid</div>
+                    <div class="fw-bold">₹{{ subscription.amount_paid }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="p-3 rounded-3" style="background:var(--soft-pink)">
+                    <div class="text-muted small">Start Date</div>
+                    <div class="fw-bold">
+                        {{ subscription.start_date|date:"d M Y" }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="p-3 rounded-3" style="background:var(--soft-pink)">
+                    <div class="text-muted small">Expiry Date</div>
+                    <div class="fw-bold">
+                        {{ subscription.end_date|date:"d M Y" }}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        ```
+
+    </div>
+
+    {% endif %}
+
+    {% if all_subscriptions %}
+
+    <div class="form-section">
+
+        ```
+        <h5 class="form-section-title">
+            <i class="bi bi-clock-history me-2"></i>
+            Payment History
+        </h5>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+
+                <thead>
+                    <tr>
+                        <th>Plan</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for sub in all_subscriptions %}
+                    <tr>
+                        <td>{{ sub.plan.get_name_display }}</td>
+                        <td>₹{{ sub.amount_paid }}</td>
+                        <td>{{ sub.start_date|date:"d M Y" }}</td>
+                        <td>
+                            {% if sub.status == 'active' %}
+                            <span class="badge-accepted">Active</span>
+                            {% else %}
+                            <span class="badge-rejected">Expired</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+        </div>
+        ```
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

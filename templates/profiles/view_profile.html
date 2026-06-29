@@ -1,0 +1,401 @@
+{% extends 'base.html' %}
+{% block title %}My Profile - TownMatrimony{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <!-- Profile Header -->
+            <div class="profile-hero mb-4">
+                <div class="row align-items-center g-3">
+
+                    <!-- Photo -->
+                    <div class="col-auto">
+                        <div style="width:110px;height:110px;
+                                    border-radius:16px;
+                                    overflow:hidden;
+                                    border:3px solid rgba(212,175,55,0.5);
+                                    background:rgba(255,255,255,0.15);
+                                    display:flex;align-items:center;
+                                    justify-content:center;">
+                            {% if profile.profile_photo %}
+                            <img src="{{ profile.profile_photo.url }}" style="width:100%;height:100%;
+                                        object-fit:cover;" alt="{{ profile.full_name }}"
+                                onerror="this.outerHTML='<span style=\'font-size:3.5rem\'>👤</span>'">
+                            {% else %}
+                            <span style="font-size:3.5rem;">👤</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Info -->
+                    <div class="col">
+                        <h2 class="fw-bold text-white mb-1">
+                            {{ profile.full_name }}
+                        </h2>
+                        <p class="text-white opacity-75 mb-1" style="font-size:0.9rem;">
+                            {{ profile.age }} yrs |
+                            {{ profile.city }},
+                            {{ profile.district }}
+                        </p>
+                        <p class="text-white opacity-75 mb-2" style="font-size:0.9rem;">
+                            {{ profile.religion|capfirst }}
+                            {% if profile.caste %}
+                            | {{ profile.caste }}
+                            {% endif %}
+                        </p>
+
+                        {% if profile.is_approved %}
+                        <span class="badge-accepted">
+                            ✅ Verified Profile
+                        </span>
+                        {% else %}
+                        <span class="badge-pending">
+                            ⏳ Pending Approval
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex gap-2 mt-3
+                            flex-wrap">
+                    <a href="{% url 'edit_profile' %}" class="btn-matrimony-gold
+                              text-decoration-none
+                              px-4 py-2" style="border-radius:50px;
+                              font-size:0.88rem;">
+                        ✏️ Edit Profile
+                    </a>
+                    <a href="{% url 'update_photo' %}" class="text-decoration-none px-4 py-2" style="background:rgba(255,255,255,0.2);
+                              color:#fff;
+                              border-radius:50px;
+                              font-size:0.88rem;
+                              border:1px solid rgba(255,255,255,0.4);">
+                        📸 Update Photo
+                    </a>
+                    <a href="{% url 'partner_preference' %}" class="text-decoration-none px-4 py-2" style="background:rgba(255,255,255,0.2);
+                              color:#fff;
+                              border-radius:50px;
+                              font-size:0.88rem;
+                              border:1px solid rgba(255,255,255,0.4);">
+                        ⚙️ Partner Preference
+                    </a>
+                </div>
+            </div>
+
+            <!-- Details Grid -->
+            <div class="row g-4">
+
+                <!-- Basic Info -->
+                <div class="col-md-6">
+                    <div class="detail-card">
+                        <h6>
+                            <i class="bi bi-person-circle me-2"></i>
+                            Basic Info
+                        </h6>
+                        <div class="detail-row">
+                            <span class="label">Date of Birth</span>
+                            <span class="value">
+                                {{ profile.date_of_birth }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Religion</span>
+                            <span class="value">
+                                {{ profile.religion|capfirst }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Caste</span>
+                            <span class="value">
+                                {{ profile.caste|default:"—" }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Subcaste</span>
+                            <span class="value">
+                                {{ profile.subcaste|default:"—" }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Mother Tongue</span>
+                            <span class="value">
+                                {{ profile.mother_tongue|default:"—" }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Marital Status</span>
+                            <span class="value">
+                                {{ profile.get_marital_status_display }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Height</span>
+                            <span class="value">
+                                {% if profile.height_cm %}
+                                {{ profile.height_cm }} cm
+                                {% else %}—{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Career -->
+                <div class="col-md-6">
+                    <div class="detail-card">
+                        <h6>
+                            <i class="bi bi-mortarboard me-2"></i>
+                            Education & Career
+                        </h6>
+                        <div class="detail-row">
+                            <span class="label">Education</span>
+                            <span class="value">
+                                {{ profile.get_education_display|default:"—" }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Degree</span>
+                            <span class="value">
+                                {{ profile.education_detail|default:"—" }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Employment</span>
+                            <span class="value">
+                                {{ profile.get_employment_type_display|default:"—" }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Job Title</span>
+                            <span class="value">
+                                {{ profile.job_title|default:"—" }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Company</span>
+                            <span class="value">
+                                {{ profile.company|default:"—" }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Annual Income</span>
+                            <span class="value">
+                                {% if profile.annual_income %}
+                                ₹{{ profile.annual_income }}
+                                {% else %}—{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Horoscope -->
+                <div class="col-md-6">
+                    <div class="detail-card">
+                        <h6>
+                            <i class="bi bi-stars me-2"></i>
+                            Horoscope
+                        </h6>
+                        <div class="detail-row">
+                            <span class="label">Star</span>
+                            <span class="value">
+                                {{ profile.star|default:"—" }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Rasi</span>
+                            <span class="value">
+                                {{ profile.rasi|default:"—" }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Lagnam</span>
+                            <span class="value">
+                                {{ profile.lagnam|default:"—" }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Chevvai Dosham</span>
+                            <span class="value">
+                                {{ profile.get_chevvai_dosham_display }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Sarpa Dosham</span>
+                            <span class="value">
+                                {{ profile.get_sarpa_dosham_display }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Family -->
+                <div class="col-md-6">
+                    <div class="detail-card">
+                        <h6>
+                            <i class="bi bi-house-heart me-2"></i>
+                            Family Details
+                        </h6>
+                        <div class="detail-row">
+                            <span class="label">Father Name</span>
+                            <span class="value">
+                                {{ profile.father_name|default:"—" }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Father Occ.</span>
+                            <span class="value">
+                                {{ profile.father_occupation|default:"—" }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Mother Name</span>
+                            <span class="value">
+                                {{ profile.mother_name|default:"—" }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Mother Occ.</span>
+                            <span class="value">
+                                {{ profile.mother_occupation|default:"—" }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Brothers</span>
+                            <span class="value">
+                                {{ profile.brothers }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Sisters</span>
+                            <span class="value">
+                                {{ profile.sisters }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Family Type</span>
+                            <span class="value">
+                                {{ profile.get_family_type_display|default:"—" }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Family Status</span>
+                            <span class="value">
+                                {{ profile.get_family_status_display|default:"—" }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Location -->
+            <div class="detail-card mt-4">
+                <h6>
+                    <i class="bi bi-geo-alt me-2"></i>
+                    Location
+                </h6>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="detail-row">
+                            <span class="label">City</span>
+                            <span class="value">
+                                {{ profile.city|default:"—" }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">District</span>
+                            <span class="value">
+                                {{ profile.district|default:"—" }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="detail-row">
+                            <span class="label">State</span>
+                            <span class="value">
+                                {{ profile.state|default:"—" }}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Country</span>
+                            <span class="value">
+                                {{ profile.country|default:"India" }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About -->
+            {% if profile.about %}
+            <div class="detail-card mt-4">
+                <h6>
+                    <i class="bi bi-chat-text me-2"></i>
+                    About Me
+                </h6>
+                <p class="text-muted mb-0" style="line-height:1.8;
+                          font-size:0.92rem;">
+                    {{ profile.about }}
+                </p>
+            </div>
+            {% endif %}
+
+            <!-- Profile Stats -->
+            <div class="detail-card mt-4">
+                <h6>
+                    <i class="bi bi-bar-chart me-2"></i>
+                    Profile Stats
+                </h6>
+                <div class="row g-3 text-center">
+                    <div class="col-4">
+                        <div style="font-size:1.8rem;
+                                    font-weight:800;
+                                    color:var(--primary);">
+                            {{ profile.profile_views }}
+                        </div>
+                        <div class="text-muted small">
+                            Profile Views
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div style="font-size:1.8rem;
+                                    font-weight:800;
+                                    color:var(--primary);">
+                            {% if profile.is_approved %}
+                            <span style="color:#27ae60;">
+                                Live
+                            </span>
+                            {% else %}
+                            <span style="color:#e67e22;">
+                                Pending
+                            </span>
+                            {% endif %}
+                        </div>
+                        <div class="text-muted small">
+                            Status
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div style="font-size:1.8rem;
+                                    font-weight:800;
+                                    color:var(--primary);">
+                            {% if profile.is_premium %}
+                            <span style="color:var(--gold);">
+                                Gold
+                            </span>
+                            {% else %}
+                            Free
+                            {% endif %}
+                        </div>
+                        <div class="text-muted small">
+                            Plan
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

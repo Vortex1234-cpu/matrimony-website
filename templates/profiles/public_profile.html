@@ -1,0 +1,361 @@
+{% extends 'base.html' %}
+{% block title %}{{ profile.full_name }} - Rajapalayam Matrimony{% endblock %}
+
+{% block content %}
+<style>
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 6px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        gap: 12px;
+    }
+
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+
+    .detail-row .label {
+        color: #6b7280;
+        font-weight: 500;
+        font-size: 0.88rem;
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
+    .detail-row .label::after {
+        content: ":";
+    }
+
+    .detail-row .value {
+        color: #1f2937;
+        font-weight: 600;
+        font-size: 0.92rem;
+        text-align: right;
+    }
+
+    #shortlist-btn {
+        transition: all 0.2s ease;
+        color: #fff;
+        border-radius: 50px;
+        font-size: 0.88rem;
+        padding: 8px 18px;
+        cursor: pointer;
+    }
+
+    #shortlist-btn:hover {
+        transform: scale(1.05);
+    }
+
+    #shortlist-btn.shortlisted {
+        background: rgba(139, 26, 26, 0.85);
+        border: 1px solid rgba(139, 26, 26, 0.6);
+    }
+
+    #shortlist-btn.not-shortlisted {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+</style>
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+
+            <!-- Profile Hero Card -->
+            <div class="profile-hero mb-4">
+                <div class="row align-items-center g-4">
+
+                    <!-- Photo -->
+                    <div class="col-auto">
+                        {% if profile.profile_photo and can_view_photo %}
+                        <img src="{{ profile.profile_photo.url }}"
+                            style="width:130px;height:130px;border-radius:18px;object-fit:cover;border:4px solid rgba(212,175,55,0.6);box-shadow:0 4px 20px rgba(0,0,0,0.3);"
+                            alt="{{ profile.full_name }}">
+                        {% elif profile.profile_photo and profile.hide_photo %}
+                        <div
+                            style="width:130px;height:130px;border-radius:18px;background:rgba(255,255,255,0.15);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:0.75rem;color:rgba(255,255,255,0.85);padding:8px;border:4px solid rgba(212,175,55,0.4);">
+                            🙈<br>Photo private<br>until mutual interest
+                        </div>
+                        {% else %}
+                        <div
+                            style="width:130px;height:130px;border-radius:18px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:4rem;border:4px solid rgba(212,175,55,0.4);">
+                            👤
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Info -->
+                    <div class="col">
+                        <h2 class="fw-bold text-white mb-1">{{ profile.full_name }}</h2>
+                        <p class="text-white opacity-75 mb-1">
+                            <i class="bi bi-person me-1"></i>
+                            {{ profile.age }} yrs | {{ profile.city }}, {{ profile.district }}
+                        </p>
+                        <p class="text-white opacity-75 mb-1">
+                            <i class="bi bi-heart me-1"></i>
+                            {{ profile.religion|capfirst }}
+                            {% if profile.caste %} | {{ profile.caste }}{% endif %}
+                        </p>
+                        {% if profile.job_title %}
+                        <p class="text-white opacity-75 mb-2">
+                            <i class="bi bi-briefcase me-1"></i>
+                            {{ profile.job_title }}
+                            {% if profile.company %} at {{ profile.company }}{% endif %}
+                        </p>
+                        {% endif %}
+
+                        <!-- Verified Badge -->
+                        <span class="badge-accepted mb-3 d-inline-block">✅ Verified Profile</span>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-2 mt-2 flex-wrap align-items-center">
+
+                            <!-- Send Interest -->
+                            {% if profile.user != request.user %}
+                            <div id="interest-section">
+                                {% if interest_sent %}
+                                {% if interest_sent.status == 'pending' %}
+                                <span class="badge-pending">⏳ Interest Sent — Pending</span>
+                                {% elif interest_sent.status == 'accepted' %}
+                                <span class="badge-accepted">✅ Interest Accepted</span>
+                                {% else %}
+                                <span class="badge-rejected">❌ Interest Rejected</span>
+                                {% endif %}
+                                {% else %}
+                                <button hx-post="/matches/send-interest/{{ profile.id }}/" hx-target="#interest-section"
+                                    hx-swap="innerHTML" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'
+                                    class="btn-matrimony-gold">
+                                    <i class="bi bi-envelope-heart me-2"></i>Send Interest
+                                </button>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+
+                            <!-- Shortlist Button -->
+                            {% if profile.user != request.user %}
+                            {% if is_shortlisted %}
+                            <button id="shortlist-btn" class="shortlisted" onclick="toggleShortlist({{ profile.id }})">
+                                <span id="shortlist-icon">❤️</span>
+                                <span id="shortlist-text"> Shortlisted</span>
+                            </button>
+                            {% else %}
+                            <button id="shortlist-btn" class="not-shortlisted"
+                                onclick="toggleShortlist({{ profile.id }})">
+                                <span id="shortlist-icon">🤍</span>
+                                <span id="shortlist-text"> Shortlist</span>
+                            </button>
+                            {% endif %}
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toast notification -->
+                <div id="shortlist-toast"
+                    style="display:none;position:fixed;bottom:24px;right:24px;background:#1f2937;color:#fff;padding:12px 20px;border-radius:12px;font-size:0.88rem;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3);transition:all 0.3s ease;">
+                </div>
+            </div>
+
+            <!-- Details Grid -->
+            <div class="row g-4">
+
+                <!-- Basic Info -->
+                <div class="col-md-6">
+                    <div class="detail-card">
+                        <h6><i class="bi bi-person-circle me-2"></i>Basic Info</h6>
+                        <div class="detail-row">
+                            <span class="label">Age</span>
+                            <span class="value">{{ profile.age }} years</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Religion</span>
+                            <span class="value">{{ profile.religion|capfirst }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Caste</span>
+                            <span class="value">{{ profile.caste|default:"-" }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Mother Tongue</span>
+                            <span class="value">{{ profile.mother_tongue|default:"-" }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Marital Status</span>
+                            <span class="value">{{ profile.get_marital_status_display }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Height</span>
+                            <span class="value">
+                                {% if profile.height_cm %}{{ profile.height_cm }} cm{% else %}-{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Career -->
+                <div class="col-md-6">
+                    <div class="detail-card">
+                        <h6><i class="bi bi-mortarboard me-2"></i>Education & Career</h6>
+                        <div class="detail-row">
+                            <span class="label">Education</span>
+                            <span class="value">{{ profile.get_education_display|default:"-" }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Degree</span>
+                            <span class="value">{{ profile.education_detail|default:"-" }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Job Title</span>
+                            <span class="value">{{ profile.job_title|default:"-" }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Company</span>
+                            <span class="value">{{ profile.company|default:"-" }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Employment</span>
+                            <span class="value">{{ profile.get_employment_type_display|default:"-" }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Income</span>
+                            <span class="value">
+                                {% if profile.annual_income %}₹{{ profile.annual_income }}{% else %}-{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Horoscope -->
+                <div class="col-md-6">
+                    <div class="detail-card">
+                        <h6><i class="bi bi-stars me-2"></i>Horoscope</h6>
+                        <div class="detail-row">
+                            <span class="label">Star</span>
+                            <span class="value">{{ profile.star|default:"-" }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Rasi</span>
+                            <span class="value">{{ profile.rasi|default:"-" }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Lagnam</span>
+                            <span class="value">{{ profile.lagnam|default:"-" }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Chevvai Dosham</span>
+                            <span class="value">{{ profile.get_chevvai_dosham_display }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Sarpa Dosham</span>
+                            <span class="value">{{ profile.get_sarpa_dosham_display }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Family -->
+                <div class="col-md-6">
+                    <div class="detail-card">
+                        <h6><i class="bi bi-house-heart me-2"></i>Family Details</h6>
+                        <div class="detail-row">
+                            <span class="label">Father</span>
+                            <span class="value">{{ profile.father_name|default:"-" }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Father Occ.</span>
+                            <span class="value">{{ profile.father_occupation|default:"-" }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Mother</span>
+                            <span class="value">{{ profile.mother_name|default:"-" }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Brothers</span>
+                            <span class="value">{{ profile.brothers }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Sisters</span>
+                            <span class="value">{{ profile.sisters }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Family Type</span>
+                            <span class="value">{{ profile.get_family_type_display|default:"-" }}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- About -->
+            {% if profile.about %}
+            <div class="detail-card mt-4">
+                <h6><i class="bi bi-chat-text me-2"></i>About Me</h6>
+                <p class="text-muted mb-0" style="line-height:1.8;font-size:0.92rem;">
+                    {{ profile.about }}
+                </p>
+            </div>
+            {% endif %}
+
+            <!-- Back -->
+            <div class="mt-4">
+                <a href="{% url 'search' %}" class="text-decoration-none" style="color:var(--primary)">
+                    <i class="bi bi-arrow-left me-1"></i>Back to Search
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function toggleShortlist(profileId) {
+        const btn = document.getElementById('shortlist-btn');
+        const icon = document.getElementById('shortlist-icon');
+        const text = document.getElementById('shortlist-text');
+
+        btn.disabled = true;
+
+        fetch(`/profiles/shortlist/toggle/${profileId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'added') {
+                    icon.textContent = '❤️';
+                    text.textContent = ' Shortlisted';
+                    btn.className = 'shortlisted';
+                    showToast('❤️ Added to shortlist!');
+                } else {
+                    icon.textContent = '🤍';
+                    text.textContent = ' Shortlist';
+                    btn.className = 'not-shortlisted';
+                    showToast('🤍 Removed from shortlist');
+                }
+                btn.disabled = false;
+            })
+            .catch(err => {
+                console.error('Shortlist error:', err);
+                btn.disabled = false;
+            });
+    }
+
+    function showToast(message) {
+        const toast = document.getElementById('shortlist-toast');
+        toast.textContent = message;
+        toast.style.display = 'block';
+        toast.style.opacity = '1';
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => toast.style.display = 'none', 300);
+        }, 2500);
+    }
+</script>
+{% endblock %}

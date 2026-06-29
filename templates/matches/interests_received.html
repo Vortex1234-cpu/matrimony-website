@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block title %}Interests Received - TownMatrimony{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <!-- Header -->
+            <div class="form-section mb-4">
+                <h3 class="fw-bold mb-2" style="color:var(--primary)">
+                    <i class="bi bi-envelope-heart me-2"></i>
+                    Interests Received
+                </h3>
+                <div class="d-flex gap-3 mt-2">
+                    <span class="badge-pending">
+                        ⏳ {{ pending_count }} Pending
+                    </span>
+                    <span class="badge-accepted">
+                        ✅ {{ accepted_count }} Accepted
+                    </span>
+                </div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="d-flex gap-2 mb-4 flex-wrap">
+                <a href="{% url 'interests_received' %}"
+                    class="{% if not status_filter %}btn-matrimony-primary{% else %}btn btn-outline-secondary{% endif %} px-4 py-2 rounded-pill text-decoration-none"
+                    style="font-size:0.88rem;">
+                    All
+                </a>
+                <a href="?status=pending"
+                    class="{% if status_filter == 'pending' %}btn-matrimony-primary{% else %}btn btn-outline-secondary{% endif %} px-4 py-2 rounded-pill text-decoration-none"
+                    style="font-size:0.88rem;">
+                    ⏳ Pending
+                </a>
+                <a href="?status=accepted"
+                    class="{% if status_filter == 'accepted' %}btn-matrimony-primary{% else %}btn btn-outline-secondary{% endif %} px-4 py-2 rounded-pill text-decoration-none"
+                    style="font-size:0.88rem;">
+                    ✅ Accepted
+                </a>
+                <a href="?status=rejected"
+                    class="{% if status_filter == 'rejected' %}btn-matrimony-primary{% else %}btn btn-outline-secondary{% endif %} px-4 py-2 rounded-pill text-decoration-none"
+                    style="font-size:0.88rem;">
+                    ❌ Rejected
+                </a>
+            </div>
+
+            <!-- Interest Cards -->
+            {% if interests %}
+            <div id="interest-list">
+                {% for interest in interests %}
+                <div class="interest-card" id="interest-card-{{ interest.id }}">
+                    <div class="d-flex align-items-center gap-4">
+
+                        <!-- Avatar -->
+                        {% if interest.sender.profile.profile_photo %}
+                        <img src="{{ interest.sender.profile.profile_photo.url }}" class="interest-avatar"
+                            alt="{{ interest.sender.first_name }}">
+                        {% else %}
+                        <div class="interest-avatar-placeholder">👤</div>
+                        {% endif %}
+
+                        <!-- Info -->
+                        <div class="flex-fill">
+                            <h6 class="fw-bold mb-1">
+                                {{ interest.sender.first_name }}
+                                {{ interest.sender.last_name }}
+                            </h6>
+                            {% if interest.sender.profile %}
+                            <p class="text-muted small mb-1">
+                                <i class="bi bi-person me-1"></i>
+                                {{ interest.sender.profile.age }} yrs |
+                                {{ interest.sender.profile.city }}
+                            </p>
+                            <p class="text-muted small mb-0">
+                                <i class="bi bi-heart me-1"></i>
+                                {{ interest.sender.profile.religion|capfirst }}
+                                {% if interest.sender.profile.caste %}
+                                | {{ interest.sender.profile.caste }}
+                                {% endif %}
+                            </p>
+                            {% endif %}
+                            <p class="text-muted" style="font-size:0.75rem;margin-top:4px;">
+                                <i class="bi bi-clock me-1"></i>
+                                Received: {{ interest.sent_at|date:"d M Y" }}
+                            </p>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="d-flex flex-column align-items-end gap-2">
+                            {% if interest.sender.profile %}
+                            <a href="/profiles/{{ interest.sender.profile.id }}/" class="text-decoration-none small"
+                                style="color:var(--primary)">
+                                View Profile →
+                            </a>
+                            {% endif %}
+
+                            <div id="action-{{ interest.id }}">
+                                {% if interest.status == 'pending' %}
+                                <div class="d-flex gap-2">
+                                    <button hx-post="{% url 'accept_interest' interest.id %}"
+                                        hx-target="#interest-card-{{ interest.id }}" hx-swap="outerHTML swap:0.5s"
+                                        hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'
+                                        class="btn-accept px-3 py-2 rounded-pill border-0">
+                                        ✅ Accept
+                                    </button>
+                                    <button hx-post="{% url 'reject_interest' interest.id %}"
+                                        hx-target="#interest-card-{{ interest.id }}" hx-swap="outerHTML swap:0.5s"
+                                        hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'
+                                        class="btn-reject px-3 py-2 rounded-pill border-0">
+                                        ❌ Reject
+                                    </button>
+                                </div>
+                                {% elif interest.status == 'accepted' %}
+                                <span class="badge-accepted">
+                                    ✅ Accepted
+                                </span>
+                                {% else %}
+                                <span class="badge-rejected">
+                                    ❌ Rejected
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% else %}
+            <div class="text-center py-5">
+                <div style="font-size:4rem">💌</div>
+                <h5 class="mt-3 text-muted">No interests yet</h5>
+                <p class="text-muted small">
+                    When someone sends you an interest
+                    it will appear here
+                </p>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

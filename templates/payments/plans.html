@@ -1,0 +1,358 @@
+{% extends 'base.html' %}
+{% block title %}Membership Plans - Rajapalayam Matrimony{% endblock %}
+
+{% block content %}
+
+<!-- Hero -->
+<div style="background:linear-gradient(135deg,#3d0000 0%,#8B0000 100%);
+            padding:60px 0 40px;text-align:center;">
+    <div class="container">
+        <span style="font-size:3rem;">👑</span>
+        <h1 style="font-family:'Playfair Display',serif;
+                   font-size:2.6rem;color:#fff;
+                   margin:12px 0 8px;">
+            Choose Your Plan
+        </h1>
+        <p style="color:rgba(255,255,255,0.75);
+                  font-size:1rem;margin-bottom:20px;">
+            Unlock full access to find your perfect match
+        </p>
+
+        {% if current_subscription %}
+        <div style="display:inline-flex;align-items:center;
+                    gap:8px;background:rgba(255,255,255,0.15);
+                    border:1px solid rgba(255,255,255,0.3);
+                    color:#fff;padding:8px 22px;
+                    border-radius:50px;font-size:0.9rem;
+                    font-weight:600;">
+            ✅ Current: {{ current_subscription.plan.name|title }} Plan
+            — Expires {{ current_subscription.end_date|date:"d M Y" }}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- DEBUG INFO - Remove after confirming plans show -->
+{% if not plans %}
+<div class="container mt-4">
+    <div class="alert alert-danger">
+        ⚠️ No plans found in database. Run this in Render Shell or via setup URL:<br>
+        <code>python manage.py shell -c "from payments.seed_plans import seed; seed()"</code>
+    </div>
+</div>
+{% endif %}
+
+<!-- Plans -->
+<div class="container py-5">
+    <div class="row g-4 justify-content-center
+                align-items-stretch mb-5">
+
+        {% for plan in plans %}
+        <div class="col-lg-4 col-md-6">
+
+            {% if plan.price == 0 %}
+            <!-- ============ FREE PLAN ============ -->
+            <div style="background:#fff;border-radius:20px;
+                        border:1px solid #e8d5d5;
+                        box-shadow:0 4px 24px rgba(139,0,0,0.07);
+                        overflow:hidden;height:100%;
+                        display:flex;flex-direction:column;">
+                <div style="padding:32px 28px 0;">
+                    <div style="text-align:center;margin-bottom:20px;">
+                        <span style="font-size:2.8rem;">🆓</span>
+                        <h2 style="font-family:'Playfair Display',serif;
+                                   font-size:2rem;color:#8B0000;
+                                   margin:8px 0 4px;">
+                            {{ plan.name|title }}
+                        </h2>
+                        <div style="font-family:'Playfair Display',serif;
+                                    font-size:2.8rem;font-weight:800;
+                                    color:#8B0000;line-height:1;">
+                            ₹0
+                        </div>
+                        <div style="color:#888;font-size:0.85rem;
+                                    margin-bottom:16px;">
+                            / forever
+                        </div>
+                        <span style="background:#fff8e1;color:#e67e22;
+                                     font-size:0.82rem;font-weight:700;
+                                     padding:5px 16px;border-radius:50px;
+                                     border:1px solid #f39c12;">
+                            {{ plan.max_interests_per_week }} Invites / Week
+                        </span>
+                    </div>
+                    <hr style="border-color:#fde8e8;">
+                    <ul style="list-style:none;padding:0;margin:16px 0 24px;">
+                        <li
+                            style="padding:9px 0;border-bottom:1px solid #fdf0f0;display:flex;align-items:center;gap:10px;font-size:0.9rem;">
+                            <span style="color:#27ae60;">✅</span> Create Profile
+                        </li>
+                        <li
+                            style="padding:9px 0;border-bottom:1px solid #fdf0f0;display:flex;align-items:center;gap:10px;font-size:0.9rem;">
+                            <span style="color:#27ae60;">✅</span> Browse All Profiles
+                        </li>
+                        <li
+                            style="padding:9px 0;border-bottom:1px solid #fdf0f0;display:flex;align-items:center;gap:10px;font-size:0.9rem;color:#8B0000;font-weight:600;">
+                            <span style="color:#27ae60;">✅</span> {{ plan.max_interests_per_week }} Interests per Week
+                            only
+                        </li>
+                        <li
+                            style="padding:9px 0;border-bottom:1px solid #fdf0f0;display:flex;align-items:center;gap:10px;font-size:0.9rem;opacity:0.45;">
+                            <span>❌</span> View Contact Numbers
+                        </li>
+                        <li
+                            style="padding:9px 0;border-bottom:1px solid #fdf0f0;display:flex;align-items:center;gap:10px;font-size:0.9rem;opacity:0.45;">
+                            <span>❌</span> Send Messages
+                        </li>
+                        <li
+                            style="padding:9px 0;display:flex;align-items:center;gap:10px;font-size:0.9rem;opacity:0.45;">
+                            <span>❌</span> Premium Badge
+                        </li>
+                    </ul>
+                </div>
+                <div style="padding:0 28px 28px;margin-top:auto;">
+                    {% if not user.is_authenticated %}
+                    <a href="{% url 'register' %}"
+                        style="display:block;text-align:center;background:linear-gradient(135deg,#8B0000,#c0392b);color:#fff;padding:14px;border-radius:50px;font-weight:700;font-size:1rem;text-decoration:none;box-shadow:0 4px 16px rgba(139,0,0,0.3);">
+                        Get Started Free
+                    </a>
+                    {% else %}
+                    <a href="{% url 'dashboard' %}"
+                        style="display:block;text-align:center;background:#f0f0f0;color:#888;padding:14px;border-radius:50px;font-weight:600;font-size:0.95rem;text-decoration:none;">
+                        Current Plan
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% elif plan.price < 1500 %} <!--============SILVER PLAN (mid price)============-->
+                <div style="background:#fff;border-radius:20px;
+                        border:1px solid #e8d5d5;
+                        box-shadow:0 4px 24px rgba(139,0,0,0.07);
+                        overflow:hidden;height:100%;
+                        display:flex;flex-direction:column;">
+                    <div style="padding:32px 28px 0;">
+                        <div style="text-align:center;margin-bottom:20px;">
+                            <span style="font-size:2.8rem;">🥈</span>
+                            <h2 style="font-family:'Playfair Display',serif;
+                                   font-size:2rem;color:#8B0000;
+                                   margin:8px 0 4px;">
+                                {{ plan.name|title }}
+                            </h2>
+                            <div style="font-family:'Playfair Display',serif;
+                                    font-size:2.8rem;font-weight:800;
+                                    color:#8B0000;line-height:1;">
+                                ₹{{ plan.price|floatformat:0 }}
+                            </div>
+                            <div style="color:#888;font-size:0.85rem;margin-bottom:16px;">
+                                / {{ plan.duration_days }} days
+                            </div>
+                            <span style="background:#e8f5e9;color:#27ae60;
+                                     font-size:0.82rem;font-weight:700;
+                                     padding:5px 16px;border-radius:50px;
+                                     border:1px solid #27ae60;">
+                                {{ plan.max_interests_per_week }} Invites / Week
+                            </span>
+                        </div>
+                        <hr style="border-color:#fde8e8;">
+                        <ul style="list-style:none;padding:0;margin:16px 0 24px;">
+                            <li
+                                style="padding:9px 0;border-bottom:1px solid #fdf0f0;display:flex;align-items:center;gap:10px;font-size:0.9rem;">
+                                <span style="color:#27ae60;">✅</span> Create Profile
+                            </li>
+                            <li
+                                style="padding:9px 0;border-bottom:1px solid #fdf0f0;display:flex;align-items:center;gap:10px;font-size:0.9rem;">
+                                <span style="color:#27ae60;">✅</span> Browse All Profiles
+                            </li>
+                            <li
+                                style="padding:9px 0;border-bottom:1px solid #fdf0f0;display:flex;align-items:center;gap:10px;font-size:0.9rem;">
+                                <span style="color:#27ae60;">✅</span> {{ plan.max_interests_per_week }} Interests per
+                                Week
+                            </li>
+                            <li
+                                style="padding:9px 0;border-bottom:1px solid #fdf0f0;display:flex;align-items:center;gap:10px;font-size:0.9rem;">
+                                {% if plan.can_view_contact %}
+                                <span style="color:#27ae60;">✅</span> View Contact Numbers
+                                {% else %}
+                                <span style="opacity:0.45;">❌</span> <span style="opacity:0.45;">View Contact
+                                    Numbers</span>
+                                {% endif %}
+                            </li>
+                            <li
+                                style="padding:9px 0;border-bottom:1px solid #fdf0f0;display:flex;align-items:center;gap:10px;font-size:0.9rem;opacity:0.45;">
+                                <span>❌</span> Send Messages
+                            </li>
+                            <li style="padding:9px 0;display:flex;align-items:center;gap:10px;font-size:0.9rem;">
+                                <span style="color:#27ae60;">✅</span> Silver Badge on Profile
+                            </li>
+                        </ul>
+                    </div>
+                    <div style="padding:0 28px 28px;margin-top:auto;">
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'create_order' plan.id %}"
+                            style="display:block;text-align:center;background:linear-gradient(135deg,#8B0000,#c0392b);color:#fff;padding:14px;border-radius:50px;font-weight:700;font-size:1rem;text-decoration:none;box-shadow:0 4px 16px rgba(139,0,0,0.3);">
+                            ⚡ Subscribe Silver — ₹{{ plan.price|floatformat:0 }}
+                        </a>
+                        {% else %}
+                        <a href="{% url 'login' %}?next={% url 'plans_page' %}"
+                            style="display:block;text-align:center;background:linear-gradient(135deg,#8B0000,#c0392b);color:#fff;padding:14px;border-radius:50px;font-weight:700;font-size:1rem;text-decoration:none;">
+                            Login to Subscribe
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% else %}
+                <!-- ============ GOLD PLAN (highest price) ============ -->
+                <div style="background:linear-gradient(160deg,#3d0000 0%,#7B0000 100%);
+                        border-radius:20px;
+                        border:2px solid #d4af37;
+                        box-shadow:0 8px 40px rgba(139,0,0,0.25);
+                        overflow:hidden;height:100%;
+                        display:flex;flex-direction:column;
+                        transform:scale(1.03);position:relative;">
+                    <div style="background:linear-gradient(to right,#d4af37,#f0d060);
+                            padding:8px;text-align:center;color:#3d0000;
+                            font-size:0.78rem;font-weight:800;
+                            letter-spacing:1.5px;text-transform:uppercase;">
+                        ⭐ MOST POPULAR
+                    </div>
+                    <div style="padding:28px 28px 0;">
+                        <div style="text-align:center;margin-bottom:20px;">
+                            <span style="font-size:2.8rem;">🥇</span>
+                            <h2 style="font-family:'Playfair Display',serif;
+                                   font-size:2rem;color:#d4af37;
+                                   margin:8px 0 4px;">
+                                {{ plan.name|title }}
+                            </h2>
+                            <div style="font-family:'Playfair Display',serif;
+                                    font-size:2.8rem;font-weight:800;
+                                    color:#d4af37;line-height:1;">
+                                ₹{{ plan.price|floatformat:0 }}
+                            </div>
+                            <div style="color:rgba(255,255,255,0.55);
+                                    font-size:0.85rem;margin-bottom:16px;">
+                                / {{ plan.duration_days }} days
+                            </div>
+                            <span style="background:rgba(212,175,55,0.2);
+                                     color:#d4af37;font-size:0.82rem;
+                                     font-weight:700;padding:5px 16px;
+                                     border-radius:50px;
+                                     border:1px solid rgba(212,175,55,0.5);">
+                                ♾️ Unlimited Invites
+                            </span>
+                        </div>
+                        <hr style="border-color:rgba(255,255,255,0.1);">
+                        <ul style="list-style:none;padding:0;margin:16px 0 24px;">
+                            <li
+                                style="padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:10px;font-size:0.9rem;color:rgba(255,255,255,0.85);">
+                                <span style="color:#27ae60;">✅</span> Create Profile
+                            </li>
+                            <li
+                                style="padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:10px;font-size:0.9rem;color:rgba(255,255,255,0.85);">
+                                <span style="color:#27ae60;">✅</span> Browse All Profiles
+                            </li>
+                            <li
+                                style="padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:10px;font-size:0.9rem;color:rgba(255,255,255,0.85);font-weight:700;">
+                                <span>♾️</span> Unlimited Interests
+                            </li>
+                            <li
+                                style="padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:10px;font-size:0.9rem;color:rgba(255,255,255,0.85);">
+                                <span style="color:#27ae60;">✅</span> View Contact Numbers
+                            </li>
+                            <li
+                                style="padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:10px;font-size:0.9rem;color:rgba(255,255,255,0.85);">
+                                <span style="color:#27ae60;">✅</span> Send Messages
+                            </li>
+                            <li
+                                style="padding:9px 0;display:flex;align-items:center;gap:10px;font-size:0.9rem;color:rgba(255,255,255,0.85);">
+                                <span style="color:#27ae60;">✅</span> Gold Badge + Priority Listing
+                            </li>
+                        </ul>
+                    </div>
+                    <div style="padding:0 28px 28px;margin-top:auto;">
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'create_order' plan.id %}"
+                            style="display:block;text-align:center;background:linear-gradient(135deg,#d4af37,#f0d060);color:#3d0000;padding:15px;border-radius:50px;font-weight:800;font-size:1rem;text-decoration:none;box-shadow:0 4px 20px rgba(212,175,55,0.45);">
+                            ⭐ Subscribe Gold — ₹{{ plan.price|floatformat:0 }}
+                        </a>
+                        {% else %}
+                        <a href="{% url 'login' %}?next={% url 'plans_page' %}"
+                            style="display:block;text-align:center;background:linear-gradient(135deg,#d4af37,#f0d060);color:#3d0000;padding:15px;border-radius:50px;font-weight:800;font-size:1rem;text-decoration:none;">
+                            Login to Subscribe
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <!-- Plan Comparison Table -->
+    {% if plans %}
+    <div class="form-section">
+        <h4 style="font-family:'Playfair Display',serif;
+                   color:#8B0000;text-align:center;
+                   margin-bottom:24px;">
+            📊 Plan Comparison
+        </h4>
+        <div class="table-responsive">
+            <table class="table text-center" style="font-size:0.9rem;">
+                <thead>
+                    <tr style="background:#8B0000;color:#fff;">
+                        <th style="text-align:left;padding:14px 18px;border-radius:10px 0 0 0;">Feature</th>
+                        {% for plan in plans %}
+                        <th style="padding:14px;{% if forloop.last %}border-radius:0 10px 0 0;{% endif %}">
+                            {{ plan.name|title }}
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align:left;padding:12px 18px;font-weight:500;">Price</td>
+                        {% for plan in plans %}
+                        <td>₹{{ plan.price|floatformat:0 }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr style="background:#fff8f0;">
+                        <td style="text-align:left;padding:12px 18px;font-weight:500;">Duration</td>
+                        {% for plan in plans %}
+                        <td>{{ plan.duration_days }} days</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td style="text-align:left;padding:12px 18px;font-weight:500;">Weekly Interests</td>
+                        {% for plan in plans %}
+                        <td>
+                            {% if plan.max_interests_per_week >= 999 %}
+                            Unlimited
+                            {% else %}
+                            {{ plan.max_interests_per_week }}
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    <tr style="background:#fff8f0;">
+                        <td style="text-align:left;padding:12px 18px;font-weight:500;">View Contact Numbers</td>
+                        {% for plan in plans %}
+                        <td>{% if plan.can_view_contact %}✅{% else %}❌{% endif %}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td style="text-align:left;padding:12px 18px;font-weight:500;">Send Messages</td>
+                        {% for plan in plans %}
+                        <td>{% if plan.can_message %}✅{% else %}❌{% endif %}</td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fff8f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 30px auto;
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(139, 0, 0, 0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #5c0000, #8B0000);
+            padding: 35px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #d4af37;
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .body {
+            padding: 35px 30px;
+            text-align: center;
+        }
+
+        .otp-box {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 2px dashed #d4af37;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+
+        .otp-code {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #8B0000;
+            letter-spacing: 12px;
+        }
+
+        .footer {
+            background: #f8f8f8;
+            padding: 20px 30px;
+            text-align: center;
+            color: #888;
+            font-size: 0.82rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💍 TownMatrimony</h1>
+        </div>
+        <div class="body">
+            <p style="font-size:1.1rem;">
+                Hello <strong>{{ user_name }}</strong>,
+            </p>
+            <p style="color:#555;">
+                Your OTP for account verification is:
+            </p>
+            <div class="otp-box">
+                <div class="otp-code">{{ otp }}</div>
+                <p style="color:#856404;margin:10px 0 0;
+                           font-size:0.88rem;">
+                    Valid for 10 minutes only
+                </p>
+            </div>
+            <p style="color:#888;font-size:0.85rem;">
+                Do not share this OTP with anyone.<br>
+                TownMatrimony will never ask for your OTP.
+            </p>
+        </div>
+        <div class="footer">
+            © 2026 Matrimony. Rajapalayam, Tamil Nadu
+        </div>
+    </div>
+</body>
+
+</html>

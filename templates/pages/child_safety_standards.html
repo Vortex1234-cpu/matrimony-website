@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Safety Standards – Rajapalayam Matrimony</title>
+    <meta name="description"
+        content="Rajapalayam Matrimony's published standards and contact information for preventing child sexual abuse and exploitation (CSAE).">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,440;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --maroon-deep: #5C1A2B;
+            --maroon-soft: #7A2638;
+            --gold: #C79A41;
+            --gold-deep: #8C5E1B;
+            --paper: #FAF7F1;
+            --paper-line: #E7DECD;
+            --ink: #2B2420;
+            --ink-soft: #5C5248;
+            --report-bg: #F6ECE8;
+            --report-border: #5C1A2B;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            margin: 0;
+            background: var(--paper);
+            color: var(--ink);
+            font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+            line-height: 1.6;
+        }
+
+        a {
+            color: var(--maroon-deep);
+            text-decoration-color: var(--gold-deep);
+        }
+
+        a:focus-visible,
+        button:focus-visible {
+            outline: 2px solid var(--maroon-deep);
+            outline-offset: 3px;
+        }
+
+        /* ---- Letterhead ---- */
+        .letterhead {
+            background: linear-gradient(180deg, var(--maroon-deep), #4A1422);
+            color: #fff;
+            padding: 56px 20px 44px;
+            text-align: center;
+        }
+
+        .seal {
+            width: 92px;
+            height: 92px;
+            margin: 0 auto 22px;
+            display: block;
+            opacity: 0;
+            animation: rise .7s ease-out .1s forwards;
+        }
+
+        .seal-ring {
+            stroke: var(--gold);
+            fill: none;
+        }
+
+        .seal-core {
+            fill: #3E0F1C;
+        }
+
+        .seal-icon {
+            stroke: var(--gold);
+            fill: none;
+        }
+
+        .seal-text {
+            fill: var(--gold);
+        }
+
+        .letterhead .eyebrow {
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 11.5px;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: #E3C685;
+            opacity: 0;
+            animation: rise .7s ease-out .22s forwards;
+        }
+
+        .letterhead h1 {
+            font-family: "Fraunces", Georgia, serif;
+            font-weight: 600;
+            font-size: clamp(30px, 5vw, 44px);
+            margin: 14px 0 10px;
+            opacity: 0;
+            animation: rise .7s ease-out .32s forwards;
+        }
+
+        .letterhead p.subtitle {
+            max-width: 520px;
+            margin: 0 auto;
+            color: #EDE0CE;
+            font-size: 15.5px;
+            opacity: 0;
+            animation: rise .7s ease-out .42s forwards;
+        }
+
+        .rule-gold {
+            width: 64px;
+            height: 1px;
+            background: var(--gold);
+            margin: 26px auto 18px;
+            border: none;
+            opacity: 0;
+            animation: rise .7s ease-out .5s forwards;
+        }
+
+        .meta-row {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            flex-wrap: wrap;
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 11.5px;
+            letter-spacing: .04em;
+            color: rgba(255, 255, 255, .62);
+            opacity: 0;
+            animation: rise .7s ease-out .58s forwards;
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .seal,
+            .letterhead .eyebrow,
+            .letterhead h1,
+            .letterhead p.subtitle,
+            .rule-gold,
+            .meta-row {
+                animation: none;
+                opacity: 1;
+            }
+        }
+
+        /* ---- Document frame ---- */
+        .page {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 36px 16px 64px;
+        }
+
+        .frame {
+            border: 1px solid var(--gold);
+            padding: 5px;
+        }
+
+        .frame-inner {
+            border: 1px solid var(--paper-line);
+            background: #fff;
+            padding: clamp(28px, 5vw, 56px);
+        }
+
+        .lede {
+            color: var(--ink-soft);
+            font-size: 15.5px;
+            margin: 0 0 8px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid var(--paper-line);
+        }
+
+        .clause {
+            display: grid;
+            grid-template-columns: 56px 1fr;
+            gap: 18px;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--paper-line);
+        }
+
+        .clause:last-of-type {
+            border-bottom: none;
+        }
+
+        .clause-num {
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 24px;
+            color: var(--gold-deep);
+            line-height: 1.2;
+            padding-top: 2px;
+        }
+
+        .clause h2 {
+            font-family: "Fraunces", Georgia, serif;
+            font-weight: 600;
+            font-size: 19px;
+            color: var(--maroon-deep);
+            margin: 0 0 9px;
+        }
+
+        .clause p {
+            margin: 0 0 10px;
+            font-size: 15.2px;
+            color: var(--ink);
+        }
+
+        .clause p:last-child {
+            margin-bottom: 0;
+        }
+
+        .clause ul {
+            margin: 10px 0 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .clause li {
+            position: relative;
+            padding-left: 18px;
+            margin-bottom: 9px;
+            font-size: 15.2px;
+        }
+
+        .clause li::before {
+            content: "◆";
+            position: absolute;
+            left: 0;
+            top: 1px;
+            font-size: 9px;
+            color: var(--gold-deep);
+        }
+
+        /* ---- Report callout ---- */
+        .report-box {
+            background: var(--report-bg);
+            border-left: 4px solid var(--report-border);
+            padding: 26px clamp(20px, 4vw, 32px);
+            margin-top: 4px;
+        }
+
+        .report-box h2 {
+            font-family: "Fraunces", Georgia, serif;
+            font-weight: 600;
+            font-size: 19px;
+            color: var(--maroon-deep);
+            margin: 0 0 12px;
+        }
+
+        .report-box p {
+            margin: 0 0 14px;
+            font-size: 15.2px;
+        }
+
+        .contact-grid {
+            display: grid;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .contact-row {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 10px;
+            font-size: 14.8px;
+        }
+
+        .contact-row dt {
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 11px;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+            margin: 0;
+            align-self: start;
+            padding-top: 2px;
+        }
+
+        .contact-row dd {
+            margin: 0;
+            color: var(--ink);
+        }
+
+        footer {
+            text-align: center;
+            padding: 34px 16px 50px;
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 11.5px;
+            letter-spacing: .03em;
+            color: var(--ink-soft);
+        }
+
+        footer .rule-gold {
+            background: var(--paper-line);
+        }
+
+        @media (max-width:560px) {
+            .letterhead {
+                padding: 44px 18px 36px;
+            }
+
+            .clause {
+                grid-template-columns: 38px 1fr;
+                gap: 12px;
+            }
+
+            .clause-num {
+                font-size: 18px;
+            }
+
+            .contact-row {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-row dt {
+                padding-top: 0;
+            }
+
+            .meta-row {
+                gap: 14px;
+                flex-direction: column;
+            }
+        }
+
+        @media print {
+            .letterhead {
+                background: #fff;
+                color: var(--ink);
+            }
+
+            .letterhead .eyebrow,
+            .meta-row {
+                color: var(--ink-soft);
+            }
+
+            .letterhead h1 {
+                color: var(--maroon-deep);
+            }
+
+            .letterhead p.subtitle {
+                color: var(--ink);
+            }
+
+            .frame {
+                border-color: var(--paper-line);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="letterhead">
+        <svg class="seal" viewBox="0 0 120 120" aria-hidden="true">
+            <defs>
+                <path id="sealCircle" d="M 60,60 m -44,0 a 44,44 0 1,1 88,0 a 44,44 0 1,1 -88,0" />
+            </defs>
+            <circle class="seal-ring" cx="60" cy="60" r="57" stroke-width="1.4" />
+            <circle class="seal-ring" cx="60" cy="60" r="45" stroke-width="1" />
+            <circle class="seal-core" cx="60" cy="60" r="34" />
+            <path class="seal-icon" d="M60,39 L73,45 V59 C73,71 67,78 60,82 C53,78 47,71 47,59 V45 Z" stroke-width="2"
+                stroke-linejoin="round" />
+            <path class="seal-icon" d="M53,60 L59,66 L70,52" stroke-width="2.4" stroke-linecap="round"
+                stroke-linejoin="round" />
+            <text class="seal-text" font-family="IBM Plex Mono, monospace" font-size="6.8" letter-spacing="2">
+                <textPath href="#sealCircle" startOffset="1%">RAJAPALAYAM MATRIMONY • CHILD SAFETY CHARTER •</textPath>
+            </text>
+        </svg>
+        <div class="eyebrow">Rajapalayam Matrimony</div>
+        <h1>Child Safety Standards</h1>
+        <p class="subtitle">Our published policy and practices for preventing child sexual abuse and exploitation (CSAE)
+            on our platform.</p>
+        <hr class="rule-gold">
+        <div class="meta-row">
+            <span>Doc. Ref. CSP-2026-01</span>
+            <span>Effective 17 June 2026</span>
+            <span>Version 1.0</span>
+        </div>
+    </header>
+
+    <div class="page">
+        <div class="frame">
+            <div class="frame-inner">
+
+                <p class="lede">This document sets out the standards Rajapalayam Matrimony follows to keep minors off
+                    our platform and to prevent, detect, and respond to child sexual abuse and exploitation (CSAE). It
+                    applies to every profile, message, and piece of content on the app, and to our staff and moderators.
+                </p>
+
+                <div class="clause">
+                    <div class="clause-num">01</div>
+                    <div>
+                        <h2>Who may use this platform</h2>
+                        <p>Rajapalayam Matrimony is a matrimonial service intended exclusively for adults seeking
+                            marriage. Every user must be at least 18 years old. Registration requires a valid
+                            government-issued photo ID, and the date of birth on file is checked before a profile is
+                            allowed to go live.</p>
+                        <p>Any account found to misrepresent its user's age, or any profile suspected of belonging to a
+                            minor, is suspended immediately on discovery.</p>
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <div class="clause-num">02</div>
+                    <div>
+                        <h2>Zero tolerance for CSAE</h2>
+                        <p>We have zero tolerance for child sexual abuse material (CSAM), the sexualisation of minors,
+                            grooming, or any attempt to use our platform to contact, exploit, or endanger a child. This
+                            applies to profile photos, biographies, private messages, and any other content shared
+                            through the app.</p>
+                        <p>Violating content is removed and the associated account permanently banned as soon as it is
+                            identified, and the matter is referred to the appropriate authorities described in Clause
+                            05.</p>
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <div class="clause-num">03</div>
+                    <div>
+                        <h2>Safeguards on the platform</h2>
+                        <ul>
+                            <li>Every profile and photo is checked before it becomes visible to other users.</li>
+                            <li>A report and block option is available on every profile and conversation.</li>
+                            <li>Messaging is limited to users who have completed identity verification.</li>
+                            <li>Accounts reported for suspected CSAE are reviewed and, where warranted, suspended
+                                pending investigation.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <div class="clause-num">04</div>
+                    <div>
+                        <h2>Cooperation with the authorities</h2>
+                        <p>We preserve information relevant to a CSAE report in line with applicable law and cooperate
+                            with the police, the Cyber Crime Cell, and other authorities investigating offences under
+                            the Protection of Children from Sexual Offences (POCSO) Act, 2012, and the Information
+                            Technology Act, 2000, including Sections 67, 67A, and 67B.</p>
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <div class="clause-num">05</div>
+                    <div class="report-box">
+                        <h2>Report a concern</h2>
+                        <p>If you see a profile, message, or piece of content that you believe involves a minor, or that
+                            appears to be CSAM, please report it right away. Reports are treated seriously regardless of
+                            whether you choose to identify yourself.</p>
+                        <dl class="contact-grid">
+                            <div class="contact-row">
+                                <dt>In the app</dt>
+                                <dd>Use the Report option on the profile or conversation in question.</dd>
+                            </div>
+                            <div class="contact-row">
+                                <dt>Email</dt>
+                                <dd><a href="mailto:sivapmsc@gmail.com">sivapmsc@gmail.com</a> — our designated contact
+                                    for CSAE-related concerns and compliance.</dd>
+                            </div>
+                            <div class="contact-row">
+                                <dt>Government portal</dt>
+                                <dd>India's National Cyber Crime Reporting Portal — <a href="https://cybercrime.gov.in"
+                                        target="_blank" rel="noopener">cybercrime.gov.in</a> — accepts CSAM reports,
+                                    including anonymously.</dd>
+                            </div>
+                            <div class="contact-row">
+                                <dt>National helpline</dt>
+                                <dd>1930 (National Cyber Crime Helpline, 24×7). For an immediate emergency, contact
+                                    local police on 100.</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <div class="clause-num">06</div>
+                    <div>
+                        <h2>Review of this policy</h2>
+                        <p>This Child Safety Standards document is reviewed at least once a year, and sooner if our
+                            practices, the law, or platform policy requirements change. The version in force is always
+                            the one published at this address.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <hr class="rule-gold">
+        Rajapalayam Matrimony — Child Safety Standards — Effective 17 June 2026
+    </footer>
+
+</body>
+
+</html>

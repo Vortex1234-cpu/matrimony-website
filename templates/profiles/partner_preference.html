@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+{% block title %}Partner Preference - TownMatrimony{% endblock %}
+
+{% block content %}
+<style>
+    .pref-page {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 1.5rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .pref-card {
+        background: #fff;
+        border: 1px solid #f0e8e8;
+        border-radius: 12px;
+        padding: 1.25rem;
+    }
+
+    .pref-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1f2937;
+        padding-bottom: 10px;
+        margin-bottom: 14px;
+        border-bottom: 1px solid #f3f4f6;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .pref-grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+    }
+
+    .pref-grid-4 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 14px;
+    }
+
+    .field-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .field-group label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .field-group input,
+    .field-group select,
+    .field-group textarea {
+        width: 100%;
+        padding: 8px 10px;
+        font-size: 13px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        background: #fafafa;
+        color: #111827;
+        outline: none;
+        box-sizing: border-box;
+    }
+
+    .field-group input:focus,
+    .field-group select:focus {
+        border-color: #7f0000;
+        background: #fff;
+    }
+
+    .field-note {
+        font-size: 11px;
+        color: #9ca3af;
+        margin-top: 2px;
+    }
+
+    .dosham-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 4px 0;
+    }
+
+    .dosham-row input[type=checkbox] {
+        margin-top: 2px;
+        width: 16px;
+        height: 16px;
+        accent-color: #7f0000;
+        flex-shrink: 0;
+    }
+
+    .dosham-label {
+        font-size: 13px;
+        color: #111827;
+        font-weight: 500;
+    }
+
+    .dosham-sub {
+        font-size: 12px;
+        color: #6b7280;
+        margin-top: 2px;
+    }
+
+    .btn-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 4px;
+    }
+
+    .btn-save {
+        flex: 1;
+        background: #7f0000;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 11px 0;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+    }
+
+    .btn-save:hover {
+        background: #660000;
+    }
+
+    .btn-skip {
+        background: #fff;
+        color: #6b7280;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 11px 22px;
+        font-size: 14px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+    }
+
+    .btn-skip:hover {
+        background: #f9fafb;
+    }
+
+    .page-header {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        padding: 0.25rem 0 0.5rem;
+    }
+
+    .page-header h2 {
+        font-size: 20px;
+        font-weight: 700;
+        color: #7f0000;
+        margin: 0;
+    }
+
+    .page-header p {
+        font-size: 13px;
+        color: #6b7280;
+        margin: 0;
+    }
+
+    @media (max-width: 540px) {
+        .pref-grid-2 {
+            grid-template-columns: 1fr;
+        }
+
+        .pref-grid-4 {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+</style>
+
+<div class="pref-page">
+
+    <div class="page-header">
+        <h2>💝 Partner Preference</h2>
+        <p>Tell us what you are looking for in your partner</p>
+    </div>
+
+    <form method="POST" style="display:flex; flex-direction:column; gap:16px;">
+        {% csrf_token %}
+
+        <!-- Age & Height -->
+        <div class="pref-card">
+            <div class="pref-title">📏 Age & Height Range</div>
+            <div class="pref-grid-4">
+                <div class="field-group">
+                    <label>Min Age</label>
+                    {{ form.min_age }}
+                </div>
+                <div class="field-group">
+                    <label>Max Age</label>
+                    {{ form.max_age }}
+                </div>
+                <div class="field-group">
+                    <label>Min Height (cm)</label>
+                    {{ form.min_height }}
+                </div>
+                <div class="field-group">
+                    <label>Max Height (cm)</label>
+                    {{ form.max_height }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Religion & Caste -->
+        <div class="pref-card">
+            <div class="pref-title">🙏 Religion & Community</div>
+            <div class="pref-grid-2">
+                <div class="field-group">
+                    <label>Preferred Religion</label>
+                    {{ form.religion }}
+                </div>
+                <div class="field-group">
+                    <label>Preferred Caste</label>
+                    {{ form.caste }}
+                    <span class="field-note">Leave blank for any caste</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Education & Career -->
+        <div class="pref-card">
+            <div class="pref-title">🎓 Education & Career</div>
+            <div class="pref-grid-2">
+                <div class="field-group">
+                    <label>Preferred Education</label>
+                    {{ form.education }}
+                </div>
+                <div class="field-group">
+                    <label>Preferred Employment</label>
+                    {{ form.employment }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Location & Marital -->
+        <div class="pref-card">
+            <div class="pref-title">📍 Location & Status</div>
+            <div class="pref-grid-2">
+                <div class="field-group">
+                    <label>Preferred Location</label>
+                    {{ form.location }}
+                </div>
+                <div class="field-group">
+                    <label>Preferred Marital Status</label>
+                    {{ form.marital_status }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Horoscope -->
+        <div class="pref-card">
+            <div class="pref-title">🔯 Horoscope Preference</div>
+            <div class="dosham-row">
+                {{ form.dosham_ok }}
+                <div>
+                    <div class="dosham-label">Dosham is acceptable</div>
+                    <div class="dosham-sub">Check this if you accept profiles with Chevvai or Sarpa dosham</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="btn-row">
+            <button type="submit" class="btn-save">💾 Save Preferences</button>
+            <a href="{% url 'dashboard' %}" class="btn-skip">Skip for now</a>
+        </div>
+
+    </form>
+
+</div>
+{% endblock %}
