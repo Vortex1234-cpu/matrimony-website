@@ -425,22 +425,17 @@
 
             if (!token) return;
 
-            const lastToken = localStorage.getItem("fcm_token");
-
-            if (lastToken === token) {
-                console.log("FCM token already registered.");
-                return;
-            }
+            console.log("Sending FCM Token:", token);
 
             try {
 
                 const response = await fetch("/notifications/save-fcm-token/", {
                     method: "POST",
+                    credentials: "include",
                     headers: {
                         "Content-Type": "application/json",
                         "X-CSRFToken": getCookie("csrftoken")
                     },
-                    credentials: "same-origin",
                     body: JSON.stringify({
                         token: token
                     })
@@ -448,16 +443,17 @@
 
                 const result = await response.json();
 
-                console.log("FCM:", result);
+                console.log("FCM Response:", result);
 
                 if (response.ok) {
                     localStorage.setItem("fcm_token", token);
+                    console.log("FCM token saved successfully.");
+                } else {
+                    console.error("Failed:", result);
                 }
 
             } catch (e) {
-
                 console.error("FCM Error:", e);
-
             }
         }
 
@@ -474,9 +470,11 @@
                     const cookie = cookies[i].trim();
 
                     if (cookie.startsWith(name + "=")) {
+
                         cookieValue = decodeURIComponent(
                             cookie.substring(name.length + 1)
                         );
+
                         break;
                     }
                 }
