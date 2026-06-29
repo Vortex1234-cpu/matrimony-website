@@ -425,6 +425,13 @@
 
             if (!token) return;
 
+            const lastToken = localStorage.getItem("fcm_token");
+
+            if (lastToken === token) {
+                console.log("FCM token already registered.");
+                return;
+            }
+
             try {
 
                 const response = await fetch("/notifications/save-fcm-token/", {
@@ -442,6 +449,10 @@
                 const result = await response.json();
 
                 console.log("FCM:", result);
+
+                if (response.ok) {
+                    localStorage.setItem("fcm_token", token);
+                }
 
             } catch (e) {
 
@@ -462,12 +473,11 @@
 
                     const cookie = cookies[i].trim();
 
-                    if (cookie.substring(0, name.length + 1) === (name + "=")) {
-
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-
+                    if (cookie.startsWith(name + "=")) {
+                        cookieValue = decodeURIComponent(
+                            cookie.substring(name.length + 1)
+                        );
                         break;
-
                     }
                 }
             }
@@ -475,7 +485,6 @@
             return cookieValue;
         }
     </script>
-
 </body>
 
 </html>

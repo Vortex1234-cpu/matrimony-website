@@ -33,6 +33,7 @@ def mark_read(request, notification_id):
     return redirect("dashboard")
 @csrf_exempt
 def save_fcm_token(request):
+
     if request.method != "POST":
         return JsonResponse(
             {"status": "error", "message": "POST request required"},
@@ -46,28 +47,44 @@ def save_fcm_token(request):
 
         if not token:
             return JsonResponse(
-                {"status": "error", "message": "Token is required"},
+                {
+                    "status": "error",
+                    "message": "Token is required"
+                },
                 status=400
             )
 
-        if not request.user.is_authenticated:
-            return JsonResponse(
-                {"status": "error", "message": "User not logged in"},
-                status=401
+        if request.user.is_authenticated:
+
+            DeviceToken.objects.update_or_create(
+                user=request.user,
+                defaults={
+                    "token": token
+                }
             )
 
-        DeviceToken.objects.update_or_create(
-            user=request.user,
-            defaults={"token": token}
+        else:
+
+            DeviceToken.objects.update_or_create(
+                token=token,
+                defaults={
+                    "user": None
+                }
+            )
+
+        return JsonResponse(
+            {
+                "status": "success",
+                "message": "FCM token saved successfully"
+            }
         )
 
-        return JsonResponse({
-            "status": "success",
-            "message": "Token saved successfully"
-        })
-
     except Exception as e:
+
         return JsonResponse(
-            {"status": "error", "message": str(e)},
+            {
+                "status": "error",
+                "message": str(e)
+            },
             status=500
         )
