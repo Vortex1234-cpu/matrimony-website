@@ -205,7 +205,11 @@ def login_view(request):
                 else:
                     login(request, user)
 
-                    # Save FCM token with logged-in user
+                    print("=" * 60)
+                    print("POST DATA:", request.POST)
+                    print("FCM TOKEN:", request.POST.get("fcm_token"))
+                    print("=" * 60)
+
                     token = request.POST.get("fcm_token")
                     if token:
                         DeviceToken.objects.update_or_create(
@@ -214,6 +218,9 @@ def login_view(request):
                                 "user": user
                             }
                         )
+                        print("TOKEN UPDATED")
+                    else:
+                        print("NO TOKEN RECEIVED")
 
                     messages.success(
                         request,
