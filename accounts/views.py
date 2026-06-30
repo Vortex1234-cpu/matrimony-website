@@ -1,7 +1,9 @@
+import json
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.utils import timezone
 from notifications.models import DeviceToken
 from .forms import RegisterForm, LoginForm
@@ -203,21 +205,13 @@ def login_view(request):
                 else:
                     login(request, user)
 
-                    # Save FCM token linked to the now-logged-in user
+                    # Save FCM token linked to the now-logged-in user (if present)
                     token = request.POST.get("fcm_token", "").strip()
-                    print("=" * 60)
-                    print("POST DATA:", request.POST)
-                    print("FCM TOKEN:", token)
-                    print("=" * 60)
-
                     if token:
                         DeviceToken.objects.update_or_create(
                             token=token,
                             defaults={"user": user}
                         )
-                        print("TOKEN UPDATED for user:", user)
-                    else:
-                        print("NO TOKEN RECEIVED")
 
                     messages.success(
                         request,
@@ -253,9 +247,6 @@ def delete_account_view(request):
     ).first()
 
     if request.method == 'POST':
-        print("=" * 60)
-        print("POST DATA:", request.POST)
-        print("=" * 60)
         password = request.POST.get('password', '')
         confirm = request.POST.get('confirm')
         reason = request.POST.get('reason', '').strip()
@@ -353,3 +344,31 @@ def reset_admin_view(request):
             )
     except Exception as e:
         return HttpResponse(f'❌ Error: {str(e)}')
+
+
+@login_required
+def update_fcm_token_view(request):
+    """
+    Dedicated endpoint for registering/updating an FCM token.
+    Called via AJAX whenever the client actually obtains a token,
+    decoupled from login so it can never race the login form submit.
+    """
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST required'}, status=405)
+
+    try:
+        data = json.loads(request.body or '{}')
+    except json.JSONDecodeError:
+        data = request.POST
+
+    token = (data.get('fcm_token') or '').strip()
+
+    if not token:
+        return JsonResponse({'error': 'fcm_token missing'}, status=400)
+
+    DeviceToken.objects.update_or_create(
+        token=token,
+        defaults={'user': request.user}
+    )
+
+    return JsonResponse({'status': 'ok'})
