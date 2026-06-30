@@ -483,6 +483,49 @@
             return cookieValue;
         }
     </script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import {
+            getMessaging,
+            getToken
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
+
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const messaging = getMessaging(app);
+
+        getToken(messaging, {
+            vapidKey: "YOUR_WEB_PUSH_CERTIFICATE_KEY"
+        }).then((token) => {
+
+            if (token) {
+
+                console.log("FCM Token:", token);
+
+                localStorage.setItem("fcm_token", token);
+
+                saveFCMToken(token);
+
+            } else {
+
+                console.log("No registration token available.");
+
+            }
+
+        }).catch((err) => {
+
+            console.error(err);
+
+        });
+    </script>
 </body>
 
 </html>
