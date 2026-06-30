@@ -51,3 +51,5 @@ urlpatterns = [
         name='password_reset_complete'
     ),
 ]
+# urls.py
+path('api/update-fcm-token/', views.update_fcm_token_view, name='update_fcm_token'),
