@@ -31,6 +31,8 @@ def mark_read(request, notification_id):
         pass
 
     return redirect("dashboard")
+
+
 @csrf_exempt
 def save_fcm_token(request):
 
@@ -42,35 +44,24 @@ def save_fcm_token(request):
 
     try:
         data = json.loads(request.body)
-
         token = data.get("token")
 
         if not token:
             return JsonResponse(
-                {
-                    "status": "error",
-                    "message": "Token is required"
-                },
+                {"status": "error", "message": "Token is required"},
                 status=400
             )
 
-        if request.user.is_authenticated:
-
-            DeviceToken.objects.update_or_create(
-                user=request.user,
-                defaults={
-                    "token": token
-                }
-            )
-
-        else:
-
-            DeviceToken.objects.update_or_create(
-                token=token,
-                defaults={
-                    "user": None
-                }
-            )
+        # Always key off the token, not the user. A token uniquely
+        # identifies one device/app-install; a user can have several
+        # devices, so looking up by user would overwrite a different
+        # device's row every time that same user logs in elsewhere.
+        DeviceToken.objects.update_or_create(
+            token=token,
+            defaults={
+                "user": request.user if request.user.is_authenticated else None
+            }
+        )
 
         return JsonResponse(
             {
@@ -80,7 +71,6 @@ def save_fcm_token(request):
         )
 
     except Exception as e:
-
         return JsonResponse(
             {
                 "status": "error",
