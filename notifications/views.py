@@ -29,13 +29,11 @@ def mark_read(request, notification_id):
         notification.save()
     except Notification.DoesNotExist:
         pass
-
     return redirect("dashboard")
 
 
 @csrf_exempt
 def save_fcm_token(request):
-
     if request.method != "POST":
         return JsonResponse(
             {"status": "error", "message": "POST request required"},
@@ -43,59 +41,52 @@ def save_fcm_token(request):
         )
 
     try:
-        # Debug: log exactly what we receive
         raw_body = request.body
-        content_type = request.META.get("CONTENT_TYPE", "")
-        print("=" * 60)
-        print("CONTENT-TYPE:", content_type)
-        print("RAW BODY:", raw_body)
-        print("POST DATA:", request.POST)
-        print("=" * 60)
-
-        # Try JSON body first, fall back to form POST
         token = None
+
         if raw_body:
             try:
                 data = json.loads(raw_body)
                 token = data.get("token") or data.get("fcm_token")
-                print("PARSED JSON TOKEN:", token)
             except json.JSONDecodeError:
-                # Not JSON — try form field
                 token = request.POST.get("token") or request.POST.get("fcm_token")
-                print("FORM TOKEN:", token)
         else:
             token = request.POST.get("token") or request.POST.get("fcm_token")
-            print("FORM TOKEN (empty body):", token)
 
         if not token:
-            print("NO TOKEN FOUND — returning 400")
             return JsonResponse(
                 {"status": "error", "message": "Token is required"},
                 status=400
             )
 
-        DeviceToken.objects.update_or_create(
-            token=token,
-            defaults={
-                "user": request.user if request.user.is_authenticated else None
-            }
-        )
+        if request.user.is_authenticated:
+            # Authenticated — always link/update this token to the logged-in user
+            DeviceToken.objects.update_or_create(
+                token=token,
+                defaults={"user": request.user}
+            )
+            print("TOKEN SAVED with user:", request.user.username)
 
-        print("TOKEN SAVED:", token[:20], "user:", request.user if request.user.is_authenticated else None)
+        else:
+            # Not authenticated — only CREATE a new row if this token
+            # doesn't exist yet. Never overwrite an existing user link with None.
+            obj, created = DeviceToken.objects.get_or_create(
+                token=token,
+                defaults={"user": None}
+            )
+            if not created and obj.user is not None:
+                print("TOKEN EXISTS with user:", obj.user.username, "— not overwriting")
+            else:
+                print("TOKEN SAVED with user=None (new anonymous token)")
 
-        return JsonResponse(
-            {
-                "status": "success",
-                "message": "FCM token saved successfully"
-            }
-        )
+        return JsonResponse({
+            "status": "success",
+            "message": "FCM token saved successfully"
+        })
 
     except Exception as e:
         print("EXCEPTION in save_fcm_token:", str(e))
         return JsonResponse(
-            {
-                "status": "error",
-                "message": str(e)
-            },
+            {"status": "error", "message": str(e)},
             status=500
         )
