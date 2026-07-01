@@ -349,3 +349,8 @@ try:
     from .firebase_service import *
 except Exception as e:
     print(f"Firebase initialization failed: {e}")
+
+
+
+# Path to your firebase_key.json (already in your project root)
+FIREBASE_KEY_PATH = os.path.join(BASE_DIR, 'firebase_key.json')

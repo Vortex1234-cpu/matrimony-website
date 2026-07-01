@@ -15,6 +15,7 @@ from accounts.email_utils import (
     send_interest_accepted_email
 )
 from profiles.models import Profile
+from notifications.services import send_push_notification
 
 
 @login_required
@@ -99,14 +100,26 @@ def send_interest(request, profile_id):
         link=f'/profiles/{profile_id}/'
     )
 
-    # Send email to receiver in background thread (non-blocking)
-    def send_email_async():
+    # Send email + push notification in background thread (non-blocking)
+    def send_notifications_async():
         try:
             send_interest_received_email(receiver, request.user)
         except Exception:
             pass
+        try:
+            send_push_notification(
+                user=receiver,
+                title='New Interest Received! 💌',
+                body=f'{request.user.first_name} sent you an interest.',
+                data={
+                    'type': 'interest_received',
+                    'profile_id': str(profile_id)
+                }
+            )
+        except Exception:
+            pass
 
-    threading.Thread(target=send_email_async, daemon=True).start()
+    threading.Thread(target=send_notifications_async, daemon=True).start()
 
     # Recalculate after sending
     new_used = get_user_weekly_interest_count(request.user)
@@ -155,14 +168,26 @@ def accept_interest(request, interest_id):
         link=f'/profiles/{interest.receiver.profile.id}/'
     )
 
-    # Send email to sender in background thread (non-blocking)
-    def send_accepted_email_async():
+    # Send email + push notification in background thread (non-blocking)
+    def send_notifications_async():
         try:
             send_interest_accepted_email(interest.sender, request.user)
         except Exception:
             pass
+        try:
+            send_push_notification(
+                user=interest.sender,
+                title='Interest Accepted! 🎉',
+                body=f'{request.user.first_name} accepted your interest!',
+                data={
+                    'type': 'interest_accepted',
+                    'profile_id': str(interest.receiver.profile.id)
+                }
+            )
+        except Exception:
+            pass
 
-    threading.Thread(target=send_accepted_email_async, daemon=True).start()
+    threading.Thread(target=send_notifications_async, daemon=True).start()
 
     if request.headers.get('HX-Request'):
         return HttpResponse(f'''
