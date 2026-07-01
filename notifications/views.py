@@ -43,25 +43,45 @@ def save_fcm_token(request):
         )
 
     try:
-        data = json.loads(request.body)
-        token = data.get("token")
+        # Debug: log exactly what we receive
+        raw_body = request.body
+        content_type = request.META.get("CONTENT_TYPE", "")
+        print("=" * 60)
+        print("CONTENT-TYPE:", content_type)
+        print("RAW BODY:", raw_body)
+        print("POST DATA:", request.POST)
+        print("=" * 60)
+
+        # Try JSON body first, fall back to form POST
+        token = None
+        if raw_body:
+            try:
+                data = json.loads(raw_body)
+                token = data.get("token") or data.get("fcm_token")
+                print("PARSED JSON TOKEN:", token)
+            except json.JSONDecodeError:
+                # Not JSON — try form field
+                token = request.POST.get("token") or request.POST.get("fcm_token")
+                print("FORM TOKEN:", token)
+        else:
+            token = request.POST.get("token") or request.POST.get("fcm_token")
+            print("FORM TOKEN (empty body):", token)
 
         if not token:
+            print("NO TOKEN FOUND — returning 400")
             return JsonResponse(
                 {"status": "error", "message": "Token is required"},
                 status=400
             )
 
-        # Always key off the token, not the user. A token uniquely
-        # identifies one device/app-install; a user can have several
-        # devices, so looking up by user would overwrite a different
-        # device's row every time that same user logs in elsewhere.
         DeviceToken.objects.update_or_create(
             token=token,
             defaults={
                 "user": request.user if request.user.is_authenticated else None
             }
         )
+
+        print("TOKEN SAVED:", token[:20], "user:", request.user if request.user.is_authenticated else None)
 
         return JsonResponse(
             {
@@ -71,6 +91,7 @@ def save_fcm_token(request):
         )
 
     except Exception as e:
+        print("EXCEPTION in save_fcm_token:", str(e))
         return JsonResponse(
             {
                 "status": "error",
