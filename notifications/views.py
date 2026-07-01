@@ -65,19 +65,13 @@ def save_fcm_token(request):
                 token=token,
                 defaults={"user": request.user}
             )
-            print("TOKEN SAVED with user:", request.user.username)
-
         else:
-            # Not authenticated — only CREATE a new row if this token
-            # doesn't exist yet. Never overwrite an existing user link with None.
-            obj, created = DeviceToken.objects.get_or_create(
+            # Not authenticated — only create if token doesn't exist yet.
+            # Never overwrite an existing user link with None.
+            DeviceToken.objects.get_or_create(
                 token=token,
                 defaults={"user": None}
             )
-            if not created and obj.user is not None:
-                print("TOKEN EXISTS with user:", obj.user.username, "— not overwriting")
-            else:
-                print("TOKEN SAVED with user=None (new anonymous token)")
 
         return JsonResponse({
             "status": "success",
@@ -85,7 +79,6 @@ def save_fcm_token(request):
         })
 
     except Exception as e:
-        print("EXCEPTION in save_fcm_token:", str(e))
         return JsonResponse(
             {"status": "error", "message": str(e)},
             status=500
