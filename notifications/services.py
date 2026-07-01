@@ -81,7 +81,10 @@ def _send_to_token(token, title, body, data=None):
                 },
                 "data": {k: str(v) for k, v in (data or {}).items()},
                 "android": {
-                    "priority": "high"
+                    "priority": "high",
+                    "notification" :{
+                        "channel_id": "matrimony_notifications"
+                    }
                 }
             }
         }
